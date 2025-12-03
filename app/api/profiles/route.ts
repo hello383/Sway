@@ -30,21 +30,19 @@ export async function POST(request: NextRequest) {
         if (existingUser) {
           authUserId = existingUser.id
         } else {
-          // Create new auth user with a random password
-          // They'll need to reset it via "Forgot password" on login
+          // Create new auth user with provided password
           const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
             email: email,
             email_confirm: true, // Auto-confirm email
-            password: `temp_${Math.random().toString(36).slice(-12)}${Math.random().toString(36).slice(-12)}`, // Temporary password
+            password: body.password, // Use user's chosen password
           })
+
+          if (authError) {
+            console.error('Auth creation error:', authError)
+          }
 
           if (authData?.user) {
             authUserId = authData.user.id
-            // Send password reset email so they can set their own password
-            await supabaseAdmin.auth.admin.generateLink({
-              type: 'recovery',
-              email: email,
-            })
           }
         }
       } catch (authErr) {

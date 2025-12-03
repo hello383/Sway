@@ -4,14 +4,16 @@ import { sendJobAlertEmail } from '@/lib/email'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params
+    
     // Get the job
     const { data: job, error: jobError } = await supabase
       .from('job_postings')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (jobError || !job) {

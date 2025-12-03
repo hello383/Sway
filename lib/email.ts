@@ -1,7 +1,7 @@
 // Email service using SendGrid (placeholder implementation)
 // Replace with actual SendGrid integration when API key is available
 
-export async function sendWelcomeEmail(email: string, name: string, visibility: 'visible' | 'email') {
+export async function sendWelcomeEmail(email: string, name: string, visibility: 'visible' | 'email' | 'campaign_only') {
   // Placeholder - implement with SendGrid
   console.log(`Welcome email sent to ${email} for ${name} (visibility: ${visibility})`)
   return { success: true }

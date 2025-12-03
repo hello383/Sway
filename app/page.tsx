@@ -89,6 +89,12 @@ export default function Home() {
               <span className="text-white/50 text-sm">/ {TARGET.toLocaleString()}</span>
             </div>
             <Link
+              href="/login"
+              className="px-6 py-2 text-white/80 hover:text-white font-bold text-sm transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
               href="/signup"
               className="px-6 py-2 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform"
             >

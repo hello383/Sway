@@ -1,9 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { MapPin, Users, Briefcase, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import IrelandMap from '@/components/IrelandMap'
+
+interface LocationPin {
+  town: string
+  county: string
+  count: number
+}
 
 interface Stats {
   totalProfessionals: number
@@ -12,45 +19,11 @@ interface Stats {
   citiesCovered: number
   locationStats: Record<string, number>
   countyStats?: Record<string, number>
+  locationPins?: LocationPin[]
 }
 
-// Simplified Ireland map coordinates for counties (approximate centers)
-const COUNTY_COORDINATES: Record<string, { x: number; y: number }> = {
-  Antrim: { x: 65, y: 15 },
-  Armagh: { x: 60, y: 20 },
-  Carlow: { x: 50, y: 60 },
-  Cavan: { x: 45, y: 30 },
-  Clare: { x: 25, y: 55 },
-  Cork: { x: 30, y: 75 },
-  Derry: { x: 55, y: 10 },
-  Donegal: { x: 40, y: 10 },
-  Down: { x: 70, y: 20 },
-  Dublin: { x: 55, y: 35 },
-  Fermanagh: { x: 50, y: 20 },
-  Galway: { x: 20, y: 40 },
-  Kerry: { x: 25, y: 70 },
-  Kildare: { x: 50, y: 40 },
-  Kilkenny: { x: 45, y: 60 },
-  Laois: { x: 45, y: 50 },
-  Leitrim: { x: 35, y: 30 },
-  Limerick: { x: 30, y: 60 },
-  Longford: { x: 40, y: 40 },
-  Louth: { x: 60, y: 30 },
-  Mayo: { x: 15, y: 30 },
-  Meath: { x: 55, y: 35 },
-  Monaghan: { x: 55, y: 25 },
-  Offaly: { x: 42, y: 48 },
-  Roscommon: { x: 30, y: 38 },
-  Sligo: { x: 25, y: 25 },
-  Tipperary: { x: 35, y: 58 },
-  Tyrone: { x: 58, y: 18 },
-  Waterford: { x: 40, y: 70 },
-  Westmeath: { x: 42, y: 42 },
-  Wexford: { x: 50, y: 70 },
-  Wicklow: { x: 55, y: 45 },
-}
 
-export default function Success() {
+function SuccessContent() {
   const searchParams = useSearchParams()
   const visibility = searchParams.get('visibility')
   const profileId = searchParams.get('id')
@@ -83,7 +56,13 @@ export default function Success() {
   }, [profileId])
 
   const getMessage = () => {
-    if (visibility === 'visible') {
+    if (visibility === 'campaign_only') {
+      return {
+        title: 'Thank You for Joining the Campaign!',
+        description:
+          'Your support helps us advocate for remote work policies in Ireland. Together we\'re building a stronger remote workforce.',
+      }
+    } else if (visibility === 'visible') {
       return {
         title: 'Your Profile is Now Live!',
         description:
@@ -157,64 +136,24 @@ export default function Success() {
             <h2 className="text-3xl font-black mb-6 text-center">
               Talent Distribution Across Ireland
             </h2>
-            <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 min-h-[400px]">
-              {/* Simplified Ireland Map SVG */}
-              <svg
-                viewBox="0 0 100 100"
-                className="w-full h-full"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                {/* Simplified Ireland outline */}
-                <path
-                  d="M 10 20 L 20 15 L 30 18 L 40 20 L 50 25 L 60 30 L 70 35 L 75 40 L 80 50 L 75 60 L 70 70 L 65 75 L 60 80 L 50 85 L 40 82 L 30 80 L 20 75 L 15 70 L 12 60 L 10 50 L 8 40 L 10 30 Z"
-                  fill="rgba(255,255,255,0.05)"
-                  stroke="rgba(255,255,255,0.2)"
-                  strokeWidth="0.5"
+            <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 min-h-[600px] overflow-hidden">
+              <div className="[&_svg_rect]:hidden [&_svg_polygon]:hidden [&_svg_circle]:not([class*='pin']):hidden">
+                <IrelandMap 
+                  countyStats={stats.countyStats} 
+                  userCounty={userCounty}
+                  locationPins={stats.locationPins}
                 />
-
-                {/* County dots - use countyStats if available, otherwise fall back to locationStats */}
-                {Object.entries(COUNTY_COORDINATES).map(([county, coords]) => {
-                  const count = stats.countyStats?.[county] || 
-                               Object.entries(stats.locationStats || {}).reduce((sum, [loc, cnt]) => {
-                                 return sum + (loc.includes(county) ? cnt : 0)
-                               }, 0)
-                  const size = Math.max(2, Math.min(10, Math.sqrt(count) * 1.5))
-                  const isUserCounty = userCounty === county
-
-                  return (
-                    <g key={county}>
-                      <circle
-                        cx={coords.x}
-                        cy={coords.y}
-                        r={size}
-                        fill={isUserCounty ? '#d946ef' : count > 0 ? '#9333ea' : 'rgba(147, 51, 234, 0.3)'}
-                        opacity={isUserCounty ? 1 : count > 0 ? 0.8 : 0.4}
-                        className="hover:opacity-100 transition-opacity cursor-pointer"
-                      >
-                        <title>{`${county}: ${count} professional${count !== 1 ? 's' : ''}`}</title>
-                      </circle>
-                      {count > 0 && (
-                        <text
-                          x={coords.x}
-                          y={coords.y + size + 2.5}
-                          fontSize="2.5"
-                          fill="rgba(255,255,255,0.9)"
-                          textAnchor="middle"
-                          className="pointer-events-none font-bold"
-                        >
-                          {county.substring(0, 4)}
-                        </text>
-                      )}
-                    </g>
-                  )
-                })}
-              </svg>
+              </div>
 
               {/* Legend */}
               <div className="mt-6 flex flex-wrap gap-4 justify-center text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-purple-500" />
                   <span className="text-white/70">Counties with talent</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-purple-600 border border-white/50" />
+                  <span className="text-white/70">Professional locations (anonymous)</span>
                 </div>
                 {userCounty && (
                   <div className="flex items-center gap-2">
@@ -229,16 +168,41 @@ export default function Success() {
 
         {/* CTA */}
         <div className="text-center">
-          <Link
-            href="/jobs"
-            className="inline-flex items-center gap-2 px-8 py-4 gradient-primary rounded-2xl font-bold text-lg hover:scale-105 transition-transform"
-          >
-            Browse Remote Jobs
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="flex gap-4 justify-center flex-wrap">
+            {visibility !== 'campaign_only' && (
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-bold transition-all"
+              >
+                Sign In to Your Profile
+              </Link>
+            )}
+            <Link
+              href="/jobs"
+              className="inline-flex items-center gap-2 px-8 py-4 gradient-primary rounded-2xl font-bold text-lg hover:scale-105 transition-transform"
+            >
+              Browse Remote Jobs
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
       </div>
     </main>
   )
 }
 
+export default function Success() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gray-950 py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="glass-dark rounded-3xl p-8 md:p-12 text-center">
+            <p className="text-white/70">Loading...</p>
+          </div>
+        </div>
+      </main>
+    }>
+      <SuccessContent />
+    </Suspense>
+  )
+}

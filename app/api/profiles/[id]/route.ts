@@ -3,13 +3,15 @@ import { supabase } from '@/lib/supabase'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params
+    
     const { data, error } = await supabase
       .from('user_profiles')
       .select('id, full_name, location, county, town, role, experience, current_company, work_hours, work_environment, profile_visibility, employment_status, created_at, updated_at')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (error || !data) {
@@ -30,9 +32,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params
     const body = await request.json()
 
     // Map form data to database columns (snake_case)
@@ -58,7 +61,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from('user_profiles')
       .update(updateData)
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single()
 

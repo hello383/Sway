@@ -1,6 +1,5 @@
 // Irish towns and cities mapped to their counties
 export const IRISH_TOWNS: Record<string, string> = {
-  // Dublin
   'Dublin': 'Dublin',
   'Dún Laoghaire': 'Dublin',
   'Swords': 'Dublin',
@@ -28,7 +27,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Ballsbridge': 'Dublin',
   'Sandymount': 'Dublin',
   'Blackrock': 'Dublin',
-  'Dún Laoghaire': 'Dublin',
   'Dalkey': 'Dublin',
   'Killiney': 'Dublin',
   'Shankill': 'Dublin',
@@ -45,8 +43,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Chapelizod': 'Dublin',
   'Castleknock': 'Dublin',
   'Clonee': 'Meath', // Close to Dublin border
-  
-  // Cork
   'Cork': 'Cork',
   'Cobh': 'Cork',
   'Youghal': 'Cork',
@@ -87,8 +83,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Crosshaven': 'Cork',
   'Whitegate': 'Cork',
   'Aghada': 'Cork',
-  
-  // Galway
   'Galway': 'Galway',
   'Tuam': 'Galway',
   'Ballinasloe': 'Galway',
@@ -125,16 +119,10 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Ahascragh': 'Galway',
   'Aughrim': 'Galway',
   'Ballymoe': 'Galway',
-  'Ballygar': 'Galway',
   'Creggs': 'Galway',
-  'Dunmore': 'Galway',
-  'Glenamaddy': 'Galway',
   'Kilconnell': 'Galway',
   'Newbridge': 'Galway',
-  'Williamstown': 'Galway',
   'Woodlawn': 'Galway',
-  
-  // Limerick
   'Limerick': 'Limerick',
   'Newcastle West': 'Limerick',
   'Kilmallock': 'Limerick',
@@ -160,8 +148,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Cappamore': 'Limerick',
   'Pallasgreen': 'Limerick',
   'Oola': 'Limerick',
-  
-  // Waterford
   'Waterford': 'Waterford',
   'Dungarvan': 'Waterford',
   'Tramore': 'Waterford',
@@ -169,17 +155,11 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Portlaw': 'Waterford',
   'Kilmacthomas': 'Waterford',
   'Dunmore East': 'Waterford',
-  'Tramore': 'Waterford',
   'Ardmore': 'Waterford',
-  'Youghal': 'Cork', // Note: Youghal is in Cork but close to Waterford border
   'Passage East': 'Waterford',
   'Cheekpoint': 'Waterford',
-  'Portlaw': 'Waterford',
   'Carrick-on-Suir': 'Tipperary', // Close to Waterford border
   'Clonmel': 'Tipperary', // Close to Waterford border
-  
-  // Wicklow
-  'Bray': 'Wicklow',
   'Wicklow': 'Wicklow',
   'Greystones': 'Wicklow',
   'Arklow': 'Wicklow',
@@ -194,16 +174,12 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Laragh': 'Wicklow',
   'Glendalough': 'Wicklow',
   'Rathdrum': 'Wicklow',
-  'Aughrim': 'Wicklow',
   'Tinahely': 'Wicklow',
   'Shillelagh': 'Wicklow',
   'Carnew': 'Wicklow',
   'Bunclody': 'Wexford', // Close to Wicklow border
   'Baltinglass': 'Wicklow',
   'Tullow': 'Carlow', // Close to Wicklow border
-  
-  // Kildare
-  'Newbridge': 'Kildare',
   'Naas': 'Kildare',
   'Athy': 'Kildare',
   'Celbridge': 'Kildare',
@@ -214,31 +190,18 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Kilcock': 'Kildare',
   'Clane': 'Kildare',
   'Sallins': 'Kildare',
-  'Naas': 'Kildare',
   'Kill': 'Kildare',
   'Eadestown': 'Kildare',
   'Brittas': 'Kildare',
-  'Blessington': 'Wicklow', // Close to Kildare border
   'Kilcullen': 'Kildare',
   'Castledermot': 'Kildare',
-  'Athy': 'Kildare',
-  'Monasterevin': 'Kildare',
-  'Kildare': 'Kildare',
   'Curragh': 'Kildare',
-  'Newbridge': 'Kildare',
   'Suncroft': 'Kildare',
   'Allenwood': 'Kildare',
   'Robertstown': 'Kildare',
   'Prosperous': 'Kildare',
-  'Clane': 'Kildare',
   'Straffan': 'Kildare',
-  'Celbridge': 'Kildare',
-  'Leixlip': 'Kildare',
-  'Maynooth': 'Kildare',
-  'Kilcock': 'Kildare',
   'Enfield': 'Meath', // Close to Kildare border
-  
-  // Meath
   'Navan': 'Meath',
   'Trim': 'Meath',
   'Kells': 'Meath',
@@ -248,85 +211,52 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Slane': 'Meath',
   'Laytown': 'Meath',
   'Bettystown': 'Meath',
-  'Drogheda': 'Louth', // Spans both counties
   'Mornington': 'Meath',
   'Donore': 'Meath',
   'Duleek': 'Meath',
   'Stamullen': 'Meath',
   'Gormanston': 'Meath',
-  'Balbriggan': 'Dublin', // Close to Meath border
   'Ratoath': 'Meath',
   'Dunshaughlin': 'Meath',
-  'Navan': 'Meath',
-  'Kells': 'Meath',
   'Oldcastle': 'Meath',
   'Castletown': 'Meath',
-  'Trim': 'Meath',
   'Athboy': 'Meath',
-  'Kells': 'Meath',
   'Nobber': 'Meath',
   'Virginia': 'Cavan', // Close to Meath border
-  
-  // Louth
   'Dundalk': 'Louth',
-  'Drogheda': 'Louth',
   'Ardee': 'Louth',
   'Carlingford': 'Louth',
-  'Blackrock': 'Louth',
   'Termonfeckin': 'Louth',
   'Clogherhead': 'Louth',
-  'Drogheda': 'Louth',
-  'Dundalk': 'Louth',
-  'Ardee': 'Louth',
-  'Carlingford': 'Louth',
   'Omeath': 'Louth',
   'Greenore': 'Louth',
-  'Dundalk': 'Louth',
   'Castlebellingham': 'Louth',
   'Dunleer': 'Louth',
   'Tallanstown': 'Louth',
   'Louth': 'Louth',
-  
-  // Wexford
   'Wexford': 'Wexford',
   'Enniscorthy': 'Wexford',
   'Gorey': 'Wexford',
   'New Ross': 'Wexford',
   'Rosslare': 'Wexford',
-  'Bunclody': 'Wexford',
-  'Enniscorthy': 'Wexford',
   'Ferns': 'Wexford',
-  'Gorey': 'Wexford',
   'Courtown': 'Wexford',
-  'Arklow': 'Wicklow', // Close to Wexford border
-  'Wexford': 'Wexford',
-  'Rosslare': 'Wexford',
   'Kilmore Quay': 'Wexford',
   'Fethard-on-Sea': 'Wexford',
   'Duncannon': 'Wexford',
-  'New Ross': 'Wexford',
   'Taghmon': 'Wexford',
-  'Wexford': 'Wexford',
   'Crossabeg': 'Wexford',
   'Oulart': 'Wexford',
   'Blackwater': 'Wexford',
-  'Castletown': 'Wexford',
-  'Courtown': 'Wexford',
   'Riverchapel': 'Wexford',
-  
-  // Kilkenny
   'Kilkenny': 'Kilkenny',
   'Callan': 'Kilkenny',
   'Thomastown': 'Kilkenny',
   'Castlecomer': 'Kilkenny',
   'Graiguenamanagh': 'Kilkenny',
-  'Kilkenny': 'Kilkenny',
-  'Callan': 'Kilkenny',
-  'Thomastown': 'Kilkenny',
   'Inistioge': 'Kilkenny',
   'Bennettsbridge': 'Kilkenny',
   'Gowran': 'Kilkenny',
-  'Castlecomer': 'Kilkenny',
   'Ballyragget': 'Kilkenny',
   'Freshford': 'Kilkenny',
   'Urlingford': 'Kilkenny',
@@ -334,42 +264,22 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Goresbridge': 'Kilkenny',
   'Paulstown': 'Kilkenny',
   'Stoneyford': 'Kilkenny',
-  'Kells': 'Kilkenny',
-  'Dunmore': 'Kilkenny',
-  
-  // Tipperary
-  'Clonmel': 'Tipperary',
   'Nenagh': 'Tipperary',
   'Thurles': 'Tipperary',
-  'Carrick-on-Suir': 'Tipperary',
   'Roscrea': 'Tipperary',
   'Cahir': 'Tipperary',
   'Cashel': 'Tipperary',
   'Templemore': 'Tipperary',
-  'Thurles': 'Tipperary',
-  'Roscrea': 'Tipperary',
-  'Nenagh': 'Tipperary',
   'Borrisokane': 'Tipperary',
-  'Portumna': 'Galway', // Close to Tipperary border
   'Ballina': 'Tipperary',
   'Killaloe': 'Clare', // Close to Tipperary border
   'Newport': 'Tipperary',
   'Toomevara': 'Tipperary',
   'Moneygall': 'Tipperary',
-  'Roscrea': 'Tipperary',
-  'Templemore': 'Tipperary',
-  'Thurles': 'Tipperary',
   'Holycross': 'Tipperary',
-  'Cashel': 'Tipperary',
-  'Cahir': 'Tipperary',
-  'Clonmel': 'Tipperary',
-  'Carrick-on-Suir': 'Tipperary',
   'Fethard': 'Tipperary',
   'Killenaule': 'Tipperary',
   'Mullinahone': 'Tipperary',
-  'Callan': 'Kilkenny', // Close to Tipperary border
-  
-  // Kerry
   'Tralee': 'Kerry',
   'Killarney': 'Kerry',
   'Listowel': 'Kerry',
@@ -377,12 +287,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Kenmare': 'Kerry',
   'Caherciveen': 'Kerry',
   'Castleisland': 'Kerry',
-  'Tralee': 'Kerry',
-  'Killarney': 'Kerry',
-  'Listowel': 'Kerry',
-  'Dingle': 'Kerry',
-  'Kenmare': 'Kerry',
-  'Caherciveen': 'Kerry',
   'Sneem': 'Kerry',
   'Waterville': 'Kerry',
   'Caherdaniel': 'Kerry',
@@ -398,7 +302,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Lixnaw': 'Kerry',
   'Ballylongford': 'Kerry',
   'Tarbert': 'Kerry',
-  'Ballybunion': 'Kerry',
   'Castlegregory': 'Kerry',
   'Camp': 'Kerry',
   'Inch': 'Kerry',
@@ -407,59 +310,34 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Ventry': 'Kerry',
   'Dunquin': 'Kerry',
   'Ballyferriter': 'Kerry',
-  
-  // Clare
   'Ennis': 'Clare',
   'Kilrush': 'Clare',
   'Shannon': 'Clare',
   'Kilkee': 'Clare',
   'Lahinch': 'Clare',
   'Newmarket-on-Fergus': 'Clare',
-  'Ennis': 'Clare',
-  'Shannon': 'Clare',
-  'Kilrush': 'Clare',
-  'Kilkee': 'Clare',
-  'Lahinch': 'Clare',
   'Miltown Malbay': 'Clare',
   'Quilty': 'Clare',
   'Doonbeg': 'Clare',
   'Kilbaha': 'Clare',
   'Carrigaholt': 'Clare',
-  'Kilkee': 'Clare',
   'Liscannor': 'Clare',
   'Doolin': 'Clare',
   'Ballyvaughan': 'Clare',
   'Fanore': 'Clare',
   'Lisdoonvarna': 'Clare',
-  'Ballyvaughan': 'Clare',
-  'Corofin': 'Clare',
   'Ennistymon': 'Clare',
   'Kilfenora': 'Clare',
   'Inagh': 'Clare',
-  'Ennistymon': 'Clare',
-  'Killaloe': 'Clare',
   'Scariff': 'Clare',
   'Mountshannon': 'Clare',
-  'Whitegate': 'Clare',
   'Feakle': 'Clare',
   'Tulla': 'Clare',
   'Bodyke': 'Clare',
   'Broadford': 'Clare',
   'Sixmilebridge': 'Clare',
-  'Newmarket-on-Fergus': 'Clare',
   'Quin': 'Clare',
-  'Tulla': 'Clare',
-  
-  // Mayo
   'Castlebar': 'Mayo',
-  'Ballina': 'Mayo',
-  'Westport': 'Mayo',
-  'Claremorris': 'Mayo',
-  'Ballinrobe': 'Mayo',
-  'Swinford': 'Mayo',
-  'Kiltimagh': 'Mayo',
-  'Castlebar': 'Mayo',
-  'Ballina': 'Mayo',
   'Westport': 'Mayo',
   'Claremorris': 'Mayo',
   'Ballinrobe': 'Mayo',
@@ -468,7 +346,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Ballyhaunis': 'Mayo',
   'Charlestown': 'Mayo',
   'Foxford': 'Mayo',
-  'Newport': 'Mayo',
   'Mulranny': 'Mayo',
   'Achill Sound': 'Mayo',
   'Keel': 'Mayo',
@@ -479,26 +356,15 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Belmullet': 'Mayo',
   'Bangor Erris': 'Mayo',
   'Crossmolina': 'Mayo',
-  'Ballina': 'Mayo',
   'Killala': 'Mayo',
   'Ballycastle': 'Mayo',
   'Lahardane': 'Mayo',
   'Addergoole': 'Mayo',
   'Knock': 'Mayo',
-  'Ballyhaunis': 'Mayo',
-  'Claremorris': 'Mayo',
   'Balla': 'Mayo',
   'Manulla': 'Mayo',
   'Turlough': 'Mayo',
-  'Ballinrobe': 'Mayo',
   'Cong': 'Mayo',
-  'Headford': 'Galway', // Close to Mayo border
-  
-  // Sligo
-  'Sligo': 'Sligo',
-  'Ballymote': 'Sligo',
-  'Tubbercurry': 'Sligo',
-  'Collooney': 'Sligo',
   'Sligo': 'Sligo',
   'Ballymote': 'Sligo',
   'Tubbercurry': 'Sligo',
@@ -517,8 +383,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Easkey': 'Sligo',
   'Enniscrone': 'Sligo',
   'Ballisodare': 'Sligo',
-  
-  // Donegal
   'Letterkenny': 'Donegal',
   'Ballybofey': 'Donegal',
   'Buncrana': 'Donegal',
@@ -526,14 +390,7 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Donegal': 'Donegal',
   'Dungloe': 'Donegal',
   'Moville': 'Donegal',
-  'Letterkenny': 'Donegal',
-  'Ballybofey': 'Donegal',
   'Stranorlar': 'Donegal',
-  'Buncrana': 'Donegal',
-  'Bundoran': 'Donegal',
-  'Donegal': 'Donegal',
-  'Dungloe': 'Donegal',
-  'Moville': 'Donegal',
   'Carndonagh': 'Donegal',
   'Ballyliffin': 'Donegal',
   'Clonmany': 'Donegal',
@@ -549,7 +406,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'St Johnston': 'Donegal',
   'Carrigans': 'Donegal',
   'Killea': 'Donegal',
-  'Newtowncunningham': 'Donegal',
   'Manorhamilton': 'Leitrim', // Close to Donegal border
   'Milford': 'Donegal',
   'Ramelton': 'Donegal',
@@ -561,24 +417,14 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Gortahork': 'Donegal',
   'Dunlewey': 'Donegal',
   'Crolly': 'Donegal',
-  'Dungloe': 'Donegal',
   'Glenties': 'Donegal',
   'Ardara': 'Donegal',
   'Killybegs': 'Donegal',
   'Mountcharles': 'Donegal',
-  'Donegal': 'Donegal',
   'Laghy': 'Donegal',
   'Ballyshannon': 'Donegal',
-  'Bundoran': 'Donegal',
   'Rossnowlagh': 'Donegal',
-  'Ballyshannon': 'Donegal',
-  
-  // Leitrim
   'Carrick-on-Shannon': 'Leitrim',
-  'Manorhamilton': 'Leitrim',
-  'Ballinamore': 'Leitrim',
-  'Carrick-on-Shannon': 'Leitrim',
-  'Manorhamilton': 'Leitrim',
   'Ballinamore': 'Leitrim',
   'Drumshanbo': 'Leitrim',
   'Dromahair': 'Leitrim',
@@ -596,14 +442,7 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Cloone': 'Leitrim',
   'Gortletteragh': 'Leitrim',
   'Fenagh': 'Leitrim',
-  'Aughrim': 'Leitrim',
   'Keshcarrigan': 'Leitrim',
-  
-  // Roscommon
-  'Roscommon': 'Roscommon',
-  'Boyle': 'Roscommon',
-  'Castlerea': 'Roscommon',
-  'Strokestown': 'Roscommon',
   'Roscommon': 'Roscommon',
   'Boyle': 'Roscommon',
   'Castlerea': 'Roscommon',
@@ -612,8 +451,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Tulsk': 'Roscommon',
   'Ballaghaderreen': 'Roscommon',
   'Frenchpark': 'Roscommon',
-  'Boyle': 'Roscommon',
-  'Carrick-on-Shannon': 'Leitrim', // Close to Roscommon border
   'Athleague': 'Roscommon',
   'Monksland': 'Roscommon',
   'Lanesborough': 'Longford', // Close to Roscommon border
@@ -622,13 +459,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Knockcroghery': 'Roscommon',
   'Rahara': 'Roscommon',
   'Ballyforan': 'Roscommon',
-  'Ballinasloe': 'Galway', // Close to Roscommon border
-  'Creggs': 'Galway', // Close to Roscommon border
-  
-  // Longford
-  'Longford': 'Longford',
-  'Ballymahon': 'Longford',
-  'Edgeworthstown': 'Longford',
   'Longford': 'Longford',
   'Ballymahon': 'Longford',
   'Edgeworthstown': 'Longford',
@@ -639,17 +469,10 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Clondra': 'Longford',
   'Legan': 'Longford',
   'Abbeyshrule': 'Longford',
-  'Ballymahon': 'Longford',
   'Moydow': 'Longford',
   'Killashee': 'Longford',
   'Ardagh': 'Longford',
   'Carrickboy': 'Longford',
-  
-  // Westmeath
-  'Athlone': 'Westmeath',
-  'Mullingar': 'Westmeath',
-  'Moate': 'Westmeath',
-  'Kilbeggan': 'Westmeath',
   'Athlone': 'Westmeath',
   'Mullingar': 'Westmeath',
   'Moate': 'Westmeath',
@@ -666,16 +489,9 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Killucan': 'Westmeath',
   'Rathwire': 'Westmeath',
   'Tyrellspass': 'Westmeath',
-  'Mullingar': 'Westmeath',
   'Ballinea': 'Westmeath',
   'Lough Owel': 'Westmeath',
   'Lough Ennell': 'Westmeath',
-  
-  // Offaly
-  'Tullamore': 'Offaly',
-  'Birr': 'Offaly',
-  'Edenderry': 'Offaly',
-  'Banagher': 'Offaly',
   'Tullamore': 'Offaly',
   'Birr': 'Offaly',
   'Edenderry': 'Offaly',
@@ -684,18 +500,14 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Kilcormac': 'Offaly',
   'Kinnitty': 'Offaly',
   'Shinrone': 'Offaly',
-  'Roscrea': 'Tipperary', // Close to Offaly border
-  'Moneygall': 'Tipperary', // Close to Offaly border
   'Portarlington': 'Laois', // Close to Offaly border
   'Daingean': 'Offaly',
   'Ballycumber': 'Offaly',
   'Ferbane': 'Offaly',
   'Shannonbridge': 'Offaly',
   'Cloghan': 'Offaly',
-  'Banagher': 'Offaly',
   'Lusmagh': 'Offaly',
   'Shannon Harbour': 'Offaly',
-  'Ballinamore': 'Offaly',
   'Geashill': 'Offaly',
   'Killeigh': 'Offaly',
   'Rahan': 'Offaly',
@@ -703,20 +515,11 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Ballyboy': 'Offaly',
   'Kilclonfert': 'Offaly',
   'Clonbullogue': 'Offaly',
-  'Edenderry': 'Offaly',
   'Clonmore': 'Offaly',
   'Cadamstown': 'Offaly',
-  'Kinnitty': 'Offaly',
   'Ballybritt': 'Offaly',
-  
-  // Laois
   'Portlaoise': 'Laois',
   'Mountmellick': 'Laois',
-  'Portarlington': 'Laois',
-  'Abbeyleix': 'Laois',
-  'Portlaoise': 'Laois',
-  'Mountmellick': 'Laois',
-  'Portarlington': 'Laois',
   'Abbeyleix': 'Laois',
   'Stradbally': 'Laois',
   'Ballylinan': 'Laois',
@@ -725,49 +528,28 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Ballinakill': 'Laois',
   'Durrow': 'Laois',
   'Cullahill': 'Laois',
-  'Castletown': 'Laois',
   'Mountrath': 'Laois',
   'Ballyfin': 'Laois',
   'Rosenallis': 'Laois',
   'Clonaslee': 'Laois',
-  'Mountmellick': 'Laois',
-  'Portlaoise': 'Laois',
-  'Portarlington': 'Laois',
   'Emo': 'Laois',
-  'Monasterevin': 'Kildare', // Close to Laois border
-  'Athy': 'Kildare', // Close to Laois border
-  
-  // Carlow
   'Carlow': 'Carlow',
-  'Tullow': 'Carlow',
-  'Muine Bheag': 'Carlow',
-  'Carlow': 'Carlow',
-  'Tullow': 'Carlow',
   'Muine Bheag': 'Carlow',
   'Bagenalstown': 'Carlow',
   'Leighlinbridge': 'Carlow',
   'Borris': 'Carlow',
   'Hacketstown': 'Carlow',
-  'Tullow': 'Carlow',
   'Rathvilly': 'Carlow',
   'Ballon': 'Carlow',
   'Clonegal': 'Carlow',
   'Kildavin': 'Carlow',
-  'Fenagh': 'Carlow',
   'Myshall': 'Carlow',
   'Ballinkillen': 'Carlow',
   'Killeshin': 'Laois', // Close to Carlow border
-  
-  // Cavan
   'Cavan': 'Cavan',
   'Belturbet': 'Cavan',
   'Cootehill': 'Cavan',
   'Ballyjamesduff': 'Cavan',
-  'Cavan': 'Cavan',
-  'Belturbet': 'Cavan',
-  'Cootehill': 'Cavan',
-  'Ballyjamesduff': 'Cavan',
-  'Virginia': 'Cavan',
   'Bailieborough': 'Cavan',
   'Kingscourt': 'Cavan',
   'Shercock': 'Cavan',
@@ -776,9 +558,6 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Mullagh': 'Cavan',
   'Killeshandra': 'Cavan',
   'Arvagh': 'Cavan',
-  'Dowra': 'Leitrim', // Close to Cavan border
-  'Blacklion': 'Cavan',
-  'Swanlinbar': 'Cavan',
   'Ballyconnell': 'Cavan',
   'Bawnboy': 'Cavan',
   'Templeport': 'Cavan',
@@ -787,18 +566,9 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Killashandra': 'Cavan',
   'Lough Gowna': 'Cavan',
   'Mountnugent': 'Cavan',
-  'Oldcastle': 'Meath', // Close to Cavan border
-  
-  // Monaghan
   'Monaghan': 'Monaghan',
-  'Carrickmacross': 'Monaghan',
   'Castleblayney': 'Monaghan',
   'Clones': 'Monaghan',
-  'Monaghan': 'Monaghan',
-  'Carrickmacross': 'Monaghan',
-  'Castleblayney': 'Monaghan',
-  'Clones': 'Monaghan',
-  'Ballybay': 'Monaghan',
   'Emyvale': 'Monaghan',
   'Scotshouse': 'Monaghan',
   'Newbliss': 'Monaghan',
@@ -806,17 +576,10 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Rockcorry': 'Monaghan',
   'Inniskeen': 'Monaghan',
   'Drum': 'Monaghan',
-  'Emyvale': 'Monaghan',
   'Aughnamullen': 'Monaghan',
   'Donagh': 'Monaghan',
   'Tydavnet': 'Monaghan',
   'Corcaghan': 'Monaghan',
-  'Ballybay': 'Monaghan',
-  'Carrickmacross': 'Monaghan',
-  'Castleblayney': 'Monaghan',
-  'Clones': 'Monaghan',
-  
-  // Northern Ireland counties (included for completeness)
   'Belfast': 'Antrim',
   'Lisburn': 'Antrim',
   'Carrickfergus': 'Antrim',
@@ -836,16 +599,10 @@ export const IRISH_TOWNS: Record<string, string> = {
   'Strabane': 'Tyrone',
   'Dungannon': 'Tyrone',
 }
-
-// Get all town names as an array (sorted)
 export const TOWN_NAMES = Object.keys(IRISH_TOWNS).sort()
-
-// Get county for a town
 export function getCountyForTown(town: string): string | null {
   return IRISH_TOWNS[town] || null
 }
-
-// Search towns by query (case-insensitive)
 export function searchTowns(query: string): string[] {
   if (!query.trim()) return []
   const lowerQuery = query.toLowerCase()
@@ -853,4 +610,3 @@ export function searchTowns(query: string): string[] {
     town.toLowerCase().includes(lowerQuery)
   ).slice(0, 10) // Limit to 10 results
 }
-

@@ -131,7 +131,7 @@ interface FormData {
   workEnvironment: string
 
   // Profile Visibility
-  profileVisibility: 'visible' | 'email' | ''
+  profileVisibility: 'visible' | 'email' | 'campaign_only' | ''
 
   // Campaign
   governmentCampaign: boolean
@@ -402,6 +402,13 @@ export default function SignUp() {
 
     setLoading(true)
     try {
+      // If they chose "Don't include me in the database", don't save profile
+      if (formData.profileVisibility === '' && !formData.governmentCampaign) {
+        // Just redirect to success page without saving
+        router.push(`/success?visibility=none`)
+        return
+      }
+
       // Use townSearch if a town was selected, otherwise use formData.town
       const townValue = townSearch && getCountyForTown(townSearch) ? townSearch : formData.town
       
@@ -425,7 +432,9 @@ export default function SignUp() {
       const data = await response.json()
 
       if (data.success) {
-        router.push(`/success?visibility=${formData.profileVisibility}&id=${data.data.id}`)
+        const visibility = formData.profileVisibility || 'campaign_only'
+        const profileId = data.data?.id ? `&id=${data.data.id}` : ''
+        router.push(`/success?visibility=${visibility}${profileId}`)
       } else {
         alert(data.error || 'Something went wrong')
         setLoading(false)
@@ -876,36 +885,56 @@ export default function SignUp() {
                     </div>
                   </div>
                 </label>
-              </div>
 
-              <div className="mt-8 p-6 rounded-2xl bg-white/5">
-                <label className="flex items-start gap-3 cursor-pointer">
+                <label className="block">
                   <input
-                    type="checkbox"
-                    checked={formData.governmentCampaign}
-                    onChange={(e) => updateField('governmentCampaign', e.target.checked)}
-                    className="mt-1 w-5 h-5 rounded border-white/20 bg-gray-900 text-purple-600 focus:ring-purple-500"
+                    type="radio"
+                    name="visibility"
+                    value="campaign_only"
+                    checked={formData.profileVisibility === 'campaign_only'}
+                    onChange={(e) => {
+                      updateField('profileVisibility', 'campaign_only')
+                      updateField('governmentCampaign', true)
+                    }}
+                    className="sr-only"
                   />
-                  <div>
-                    <div className="font-bold mb-1">
-                      Support Grow Remote&apos;s advocacy campaign
-                    </div>
-                    <div className="text-sm text-white/70">
-                      Help us advocate for remote work policies in Ireland. Your reason
-                      (if provided) will be shared anonymously.
+                  <div
+                    className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${
+                      formData.profileVisibility === 'campaign_only'
+                        ? 'border-purple-500 bg-purple-500/10'
+                        : 'border-white/20 bg-white/5 hover:border-white/40'
+                    }`}
+                    onClick={() => {
+                      updateField('profileVisibility', 'campaign_only')
+                      updateField('governmentCampaign', true)
+                    }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 ${
+                          formData.profileVisibility === 'campaign_only'
+                            ? 'border-purple-500 bg-purple-500'
+                            : 'border-white/40'
+                        }`}
+                      >
+                        {formData.profileVisibility === 'campaign_only' && (
+                          <Check className="w-4 h-4 text-white" />
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-2">
+                          Join the campaign and don&apos;t include me in the database
+                        </h3>
+                        <p className="text-white/70 text-sm">
+                          Support Grow Remote&apos;s mission to get the Irish government to set
+                          a target for bringing remote jobs to Ireland. You&apos;ll receive
+                          occasional updates about the campaign, but your profile won&apos;t be
+                          stored in the database.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </label>
-
-                {formData.governmentCampaign && (
-                  <textarea
-                    value={formData.campaignReason}
-                    onChange={(e) => updateField('campaignReason', e.target.value)}
-                    placeholder="Why does remote work matter to you? (optional)"
-                    rows={4}
-                    className="w-full mt-4 px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                )}
               </div>
             </div>
           )}

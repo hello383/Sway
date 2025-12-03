@@ -20,7 +20,7 @@ async function setupDatabase() {
     console.log(`🔗 Connecting to: ${SUPABASE_URL}\n`)
 
     // Create Supabase client with service role key for admin operations
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    const supabase = createClient(SUPABASE_URL as string, SUPABASE_SERVICE_KEY as string)
 
     // Read the SQL schema file
     const schemaPath = path.join(__dirname, '../supabase/schema.sql')
@@ -48,7 +48,7 @@ async function setupDatabase() {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec_sql`, {
           method: 'POST',
           headers: {
-            'apikey': SUPABASE_SERVICE_KEY,
+            'apikey': SUPABASE_SERVICE_KEY as string,
             'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
             'Content-Type': 'application/json',
           },

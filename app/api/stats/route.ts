@@ -38,6 +38,30 @@ export async function GET() {
       countyStats[county] = (countyStats[county] || 0) + 1
     })
 
+    // Get anonymous location data for map pins (town, county, count)
+    const { data: locationDataForPins } = await supabase
+      .from('user_profiles')
+      .select('town, county, location')
+
+    // Aggregate by town/county for anonymous pinning
+    const locationPins: Array<{ town: string; county: string; count: number }> = []
+    const pinMap = new Map<string, number>()
+    
+    locationDataForPins?.forEach((profile) => {
+      const town = profile.town || profile.location || ''
+      const county = profile.county || ''
+      const key = `${town}|${county}`
+      pinMap.set(key, (pinMap.get(key) || 0) + 1)
+    })
+
+    // Convert to array format
+    pinMap.forEach((count, key) => {
+      const [town, county] = key.split('|')
+      if (town && county) {
+        locationPins.push({ town, county, count })
+      }
+    })
+
     const citiesCovered = Object.keys(locationStats).length
 
     return NextResponse.json({
@@ -50,6 +74,7 @@ export async function GET() {
         citiesCovered,
         locationStats,
         countyStats,
+        locationPins, // Anonymous location data for map pins
       },
     })
   } catch (error: any) {

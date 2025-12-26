@@ -997,9 +997,9 @@ function SignUpContent() {
           {/* Step 3: Profile Visibility */}
           {step === 3 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold mb-6">Profile Visibility</h2>
+              <h2 className="text-2xl font-bold mb-6">How would you like to use Sway?</h2>
               <p className="text-white/70 mb-6">
-                Choose how you want to use Sway:
+                Choose how employers can find you and how you'll receive opportunities:
               </p>
 
               <div className="space-y-4">
@@ -1034,11 +1034,11 @@ function SignUpContent() {
                       </div>
                       <div>
                         <h3 className="font-bold text-lg mb-2">
-                          Make my profile visible to employers
+                          Public Profile — Let employers find me
                         </h3>
                         <p className="text-white/70 text-sm">
-                          Your profile will be searchable by employers. They can discover
-                          your skills and contact you directly about opportunities.
+                          Your profile will be visible and searchable by employers. They can discover
+                          your skills, location, and preferences, then contact you directly about opportunities.
                         </p>
                       </div>
                     </div>
@@ -1076,11 +1076,11 @@ function SignUpContent() {
                       </div>
                       <div>
                         <h3 className="font-bold text-lg mb-2">
-                          Email me about remote jobs
+                          Private Profile — Email notifications only
                         </h3>
                         <p className="text-white/70 text-sm">
-                          Your profile stays private. You&apos;ll receive email notifications
-                          about remote job opportunities that match your preferences.
+                          Your profile stays completely private. You&apos;ll receive email notifications
+                          about remote job opportunities that match your skills and preferences, but employers won&apos;t be able to search or contact you directly.
                         </p>
                       </div>
                     </div>
@@ -1124,13 +1124,13 @@ function SignUpContent() {
                       </div>
                       <div>
                         <h3 className="font-bold text-lg mb-2">
-                          Join the campaign and don&apos;t include me in the database
+                          Support the campaign only
                         </h3>
                         <p className="text-white/70 text-sm">
                           Support Grow Remote&apos;s mission to get the Irish government to set
                           a target for bringing remote jobs to Ireland. You&apos;ll receive
-                          occasional updates about the campaign, but your profile won&apos;t be
-                          stored in the database.
+                          occasional campaign updates, but your profile won&apos;t be stored and
+                          employers won&apos;t be able to contact you.
                         </p>
                       </div>
                     </div>

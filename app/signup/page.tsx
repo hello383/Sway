@@ -126,6 +126,7 @@ interface FormData {
   experience: string
   currentCompany: string
   expectedSalary: string
+  linkedinUrl: string
 
   // Work Preferences
   workHours: string
@@ -189,6 +190,7 @@ function SignUpContent() {
     experience: '',
     currentCompany: '',
     expectedSalary: '',
+    linkedinUrl: '',
     workHours: '',
     remoteRetreats: '',
     workEnvironment: '',
@@ -894,6 +896,22 @@ function SignUpContent() {
                   placeholder="e.g., €50k-€70k"
                   className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">
+                  LinkedIn Profile <span className="text-white/50 text-xs font-normal">(Optional)</span>
+                </label>
+                <input
+                  type="url"
+                  value={formData.linkedinUrl}
+                  onChange={(e) => updateField('linkedinUrl', e.target.value)}
+                  placeholder="https://linkedin.com/in/yourprofile"
+                  className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <p className="text-xs text-white/50 mt-1">
+                  Share your LinkedIn profile to help employers learn more about you
+                </p>
               </div>
 
               <h2 className="text-2xl font-bold mt-8 mb-6">Work Preferences</h2>

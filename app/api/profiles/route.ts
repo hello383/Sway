@@ -65,6 +65,7 @@ export async function POST(request: NextRequest) {
       experience: body.experience,
       current_company: body.currentCompany || null,
       expected_salary: body.expectedSalary || null,
+      linkedin_url: body.linkedinUrl || null,
       work_hours: body.workHours,
       remote_retreats: body.remoteRetreats || null,
       work_environment: body.workEnvironment || null,

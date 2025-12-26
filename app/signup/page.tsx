@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useRef, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import Link from 'next/link'
 import { searchTowns, getCountyForTown, TOWN_NAMES } from '@/lib/irishTowns'
@@ -140,10 +140,12 @@ interface FormData {
   campaignReason: string
 }
 
-export default function SignUp() {
+function SignUpContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [isOAuthUser, setIsOAuthUser] = useState(false)
   const [townSearch, setTownSearch] = useState('')
   const [townSuggestions, setTownSuggestions] = useState<string[]>([])
   const [showTownDropdown, setShowTownDropdown] = useState(false)
@@ -193,6 +195,36 @@ export default function SignUp() {
     governmentCampaign: false,
     campaignReason: '',
   })
+
+  // Check for OAuth callback and pre-fill user data
+  useEffect(() => {
+    const oauthSuccess = searchParams?.get('oauth')
+    const oauthEmail = searchParams?.get('email')
+    
+    if (oauthSuccess === 'success' && oauthEmail) {
+      setIsOAuthUser(true)
+      updateField('email', decodeURIComponent(oauthEmail))
+      
+      // Try to get user info from Supabase session
+      const checkUser = async () => {
+        try {
+          const { supabase } = await import('@/lib/supabase')
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user) {
+            if (user.user_metadata?.full_name) {
+              updateField('fullName', user.user_metadata.full_name)
+            }
+            if (user.email) {
+              updateField('email', user.email)
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error)
+        }
+      }
+      checkUser()
+    }
+  }, [searchParams])
 
   const updateField = (field: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -380,6 +412,17 @@ export default function SignUp() {
     if (step === 1) {
       // Check location - use townSearch if location is empty (for typed values)
       const location = formData.location || townSearch
+      // For OAuth users, skip password validation
+      if (isOAuthUser) {
+        return !!(
+          formData.fullName?.trim() && 
+          formData.email?.trim() && 
+          location?.trim() && 
+          formData.employmentStatus?.trim() && 
+          formData.experience?.trim()
+        )
+      }
+      // For email signup, require passwords
       const passwordsMatch = formData.password === formData.confirmPassword
       const passwordValid = formData.password.length >= 6
       return !!(
@@ -468,12 +511,18 @@ export default function SignUp() {
 
         <div className="glass-dark rounded-3xl p-8 md:p-12">
           <h1 className="text-4xl md:text-5xl font-black mb-2">Join Sway</h1>
+          {isOAuthUser && (
+            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+              <p className="text-green-400 font-bold text-sm mb-1">✓ Signed in with Google</p>
+              <p className="text-white/70 text-sm">Complete your profile to finish signing up</p>
+            </div>
+          )}
           <p className="text-white/70 mb-6">
             Step {step} of 3
           </p>
 
-          {/* Google Sign In - Only show on Step 1 */}
-          {step === 1 && (
+          {/* Google Sign In - Only show on Step 1 if not already signed in via OAuth */}
+          {step === 1 && !isOAuthUser && (
             <div className="mb-8">
               <button
                 onClick={async () => {
@@ -481,7 +530,7 @@ export default function SignUp() {
                   const { error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                      redirectTo: `${window.location.origin}/signup`,
+                      redirectTo: `${window.location.origin}/auth/callback?next=/signup`,
                       queryParams: {
                         access_type: 'offline',
                         prompt: 'consent',
@@ -551,40 +600,48 @@ export default function SignUp() {
                   onChange={(e) => updateField('email', e.target.value)}
                   className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
+                  disabled={isOAuthUser}
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold mb-2">
-                  Password <span className="text-red-400">*</span>
-                </label>
-                <input
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => updateField('password', e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  minLength={6}
-                  required
-                />
-                <p className="text-xs text-white/50 mt-1">At least 6 characters</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold mb-2">
-                  Confirm Password <span className="text-red-400">*</span>
-                </label>
-                <input
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={(e) => updateField('confirmPassword', e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  minLength={6}
-                  required
-                />
-                {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                  <p className="text-xs text-red-400 mt-1">Passwords do not match</p>
+                {isOAuthUser && (
+                  <p className="text-xs text-white/50 mt-1">Email from your Google account</p>
                 )}
               </div>
+
+              {!isOAuthUser && (
+                <>
+                  <div>
+                    <label className="block text-sm font-bold mb-2">
+                      Password <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={formData.password}
+                      onChange={(e) => updateField('password', e.target.value)}
+                      className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      minLength={6}
+                      required
+                    />
+                    <p className="text-xs text-white/50 mt-1">At least 6 characters</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold mb-2">
+                      Confirm Password <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={formData.confirmPassword}
+                      onChange={(e) => updateField('confirmPassword', e.target.value)}
+                      className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      minLength={6}
+                      required
+                    />
+                    {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                      <p className="text-xs text-red-400 mt-1">Passwords do not match</p>
+                    )}
+                  </div>
+                </>
+              )}
 
               <div>
                 <label className="block text-sm font-bold mb-2">
@@ -1058,6 +1115,22 @@ export default function SignUp() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function SignUp() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gray-950 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="glass-dark rounded-3xl p-8 md:p-12 text-center">
+            <p className="text-white/70">Loading...</p>
+          </div>
+        </div>
+      </main>
+    }>
+      <SignUpContent />
+    </Suspense>
   )
 }
 

@@ -19,18 +19,19 @@ export async function POST(request: NextRequest) {
 
     const email = body.email.toLowerCase().trim()
 
-    // Create Supabase Auth user (only if they want to be in database - not for campaign_only)
+    // Create or find Supabase Auth user (only if they want to be in database - not for campaign_only)
     let authUserId = null
     if (body.profileVisibility === 'visible' || body.profileVisibility === 'email') {
       try {
-        // Check if user already exists
+        // Check if user already exists (from OAuth or previous signup)
         const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers()
         const existingUser = existingUsers?.users.find(u => u.email === email)
         
         if (existingUser) {
+          // User already has an auth account (from OAuth or previous signup)
           authUserId = existingUser.id
-        } else {
-          // Create new auth user with provided password
+        } else if (body.password) {
+          // Create new auth user with provided password (email signup)
           const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
             email: email,
             email_confirm: true, // Auto-confirm email
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest) {
             authUserId = authData.user.id
           }
         }
+        // If no password provided and no existing user, skip auth creation (OAuth users should already have auth)
       } catch (authErr) {
         // If auth creation fails, continue without auth user
         console.error('Auth user creation failed:', authErr)

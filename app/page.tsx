@@ -307,6 +307,31 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10 py-8 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-white/50 text-sm">
+              © {new Date().getFullYear()} Sway. Powered by Grow Remote.
+            </div>
+            <div className="flex items-center gap-6">
+              <Link
+                href="/privacy"
+                className="text-white/50 hover:text-white text-sm transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-white/50 hover:text-white text-sm transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }

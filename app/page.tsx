@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowRight, Users, MapPin, Briefcase, Zap } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { ArrowRight, Users, MapPin, Briefcase, Zap, LogOut } from 'lucide-react'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 interface Stats {
   totalProfessionals: number
@@ -11,6 +13,7 @@ interface Stats {
 }
 
 export default function Home() {
+  const router = useRouter()
   const TARGET = 1500
   const [stats, setStats] = useState<Stats>({
     totalProfessionals: 0,
@@ -18,6 +21,7 @@ export default function Home() {
     totalJobs: 0,
   })
   const [activeTab, setActiveTab] = useState<'you' | 'movement'>('you')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     fetch('/api/stats')
@@ -32,6 +36,20 @@ export default function Home() {
         }
       })
       .catch(console.error)
+
+    // Check if user is logged in
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setIsLoggedIn(!!session)
+    }
+    checkSession()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const progressPercent = Math.min(
@@ -88,18 +106,34 @@ export default function Home() {
               </span>
               <span className="text-white/50 text-sm">/ {TARGET.toLocaleString()}</span>
             </div>
-            <Link
-              href="/login"
-              className="px-6 py-2 text-white/80 hover:text-white font-bold text-sm transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/signup"
-              className="px-6 py-2 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform"
-            >
-              Join Now
-            </Link>
+            {isLoggedIn ? (
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut()
+                  router.push('/')
+                  router.refresh()
+                }}
+                className="px-6 py-2 text-white/80 hover:text-white font-bold text-sm transition-colors flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </button>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-6 py-2 text-white/80 hover:text-white font-bold text-sm transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="px-6 py-2 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform"
+                >
+                  Join Now
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>

@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { MapPin, Users, Briefcase, ArrowRight } from 'lucide-react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { MapPin, Users, Briefcase, ArrowRight, LogOut } from 'lucide-react'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 import IrelandMap from '@/components/IrelandMap'
 
 interface LocationPin {
@@ -24,6 +25,7 @@ interface Stats {
 
 
 function SuccessContent() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const visibility = searchParams.get('visibility')
   const profileId = searchParams.get('id')
@@ -184,6 +186,17 @@ function SuccessContent() {
               Browse Remote Jobs
               <ArrowRight className="w-5 h-5" />
             </Link>
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut()
+                router.push('/')
+                router.refresh()
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/20 rounded-xl font-bold transition-all"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
           </div>
         </div>
       </div>

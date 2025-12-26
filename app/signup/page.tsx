@@ -146,6 +146,7 @@ function SignUpContent() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [isOAuthUser, setIsOAuthUser] = useState(false)
+  const [error, setError] = useState('')
   const [townSearch, setTownSearch] = useState('')
   const [townSuggestions, setTownSuggestions] = useState<string[]>([])
   const [showTownDropdown, setShowTownDropdown] = useState(false)
@@ -196,35 +197,72 @@ function SignUpContent() {
     campaignReason: '',
   })
 
-  // Check for OAuth callback and pre-fill user data
+  // Check for existing session and OAuth callback
   useEffect(() => {
-    const oauthSuccess = searchParams?.get('oauth')
-    const oauthEmail = searchParams?.get('email')
-    
-    if (oauthSuccess === 'success' && oauthEmail) {
-      setIsOAuthUser(true)
-      updateField('email', decodeURIComponent(oauthEmail))
-      
-      // Try to get user info from Supabase session
-      const checkUser = async () => {
-        try {
-          const { supabase } = await import('@/lib/supabase')
-          const { data: { user } } = await supabase.auth.getUser()
-          if (user) {
-            if (user.user_metadata?.full_name) {
-              updateField('fullName', user.user_metadata.full_name)
-            }
-            if (user.email) {
-              updateField('email', user.email)
+    const checkSession = async () => {
+      try {
+        const { supabase } = await import('@/lib/supabase')
+        
+        // Check for error in URL params
+        const urlError = searchParams?.get('error')
+        if (urlError) {
+          setError(decodeURIComponent(urlError))
+        }
+        
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session?.user) {
+          // User is already signed in - check if they have a profile
+          const userEmail = session.user.email
+          if (userEmail) {
+            const { data: profile } = await supabase
+              .from('user_profiles')
+              .select('id, profile_visibility')
+              .eq('email', userEmail.toLowerCase())
+              .maybeSingle()
+
+            if (profile && profile.id) {
+              // User has a profile - redirect to success page
+              router.push(`/success?visibility=${profile.profile_visibility || 'email'}&id=${profile.id}`)
+              return
+            } else {
+              // User is signed in but no profile - show OAuth signup flow
+              setIsOAuthUser(true)
+              updateField('email', userEmail)
+              if (session.user.user_metadata?.full_name) {
+                updateField('fullName', session.user.user_metadata.full_name)
+              }
             }
           }
-        } catch (error) {
-          console.error('Error fetching user:', error)
+        } else {
+          // Check for OAuth callback parameters
+          const oauthSuccess = searchParams?.get('oauth')
+          const oauthEmail = searchParams?.get('email')
+          
+          if (oauthSuccess === 'success' && oauthEmail) {
+            setIsOAuthUser(true)
+            updateField('email', decodeURIComponent(oauthEmail))
+            
+            // Try to get user info from Supabase session
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+              if (user.user_metadata?.full_name) {
+                updateField('fullName', user.user_metadata.full_name)
+              }
+              if (user.email) {
+                updateField('email', user.email)
+              }
+            }
+          }
         }
+      } catch (error: any) {
+        console.error('Error checking session:', error)
+        setError(error.message || 'Error checking session')
       }
-      checkUser()
     }
-  }, [searchParams])
+
+    checkSession()
+  }, [searchParams, router])
 
   const updateField = (field: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -520,6 +558,11 @@ function SignUpContent() {
           <p className="text-white/70 mb-6">
             Step {step} of 3
           </p>
+          {error && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
 
           {/* Google Sign In - Only show on Step 1 if not already signed in via OAuth */}
           {step === 1 && !isOAuthUser && (
@@ -537,7 +580,10 @@ function SignUpContent() {
                       },
                     },
                   })
-                  if (error) console.error('OAuth error:', error)
+                  if (error) {
+                    console.error('OAuth error:', error)
+                    setError(error.message)
+                  }
                 }}
                 className="w-full px-6 py-3 bg-white text-gray-900 rounded-xl font-bold hover:bg-gray-100 transition-colors flex items-center justify-center gap-3"
               >

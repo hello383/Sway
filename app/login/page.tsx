@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
@@ -13,6 +13,39 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isResetMode, setIsResetMode] = useState(false)
+
+  // Check if user is already signed in
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session?.user) {
+          // User is already signed in - check if they have a profile
+          const userEmail = session.user.email
+          if (userEmail) {
+            const { data: profile } = await supabase
+              .from('user_profiles')
+              .select('id, profile_visibility')
+              .eq('email', userEmail.toLowerCase())
+              .maybeSingle()
+
+            if (profile && profile.id) {
+              // User has a profile - redirect to success page
+              router.push(`/success?visibility=${profile.profile_visibility || 'email'}&id=${profile.id}`)
+            } else {
+              // User is signed in but no profile - redirect to signup
+              router.push('/signup?oauth=success&email=' + encodeURIComponent(userEmail))
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error checking session:', error)
+      }
+    }
+
+    checkSession()
+  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -106,6 +139,9 @@ export default function Login() {
                       },
                     },
                   })
+                  if (oauthError) {
+                    setError(oauthError.message)
+                  }
                   if (oauthError) {
                     setError(oauthError.message)
                   }

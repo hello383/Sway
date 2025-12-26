@@ -16,7 +16,8 @@ A modern web application connecting Irish professionals with remote job opportun
 - **Styling**: Tailwind CSS with custom glassmorphic design
 - **Icons**: Lucide React
 - **Backend**: Next.js API Routes
-- **Database**: MongoDB with Mongoose
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth with Google OAuth
 - **Email**: SendGrid (placeholder implementation)
 
 ## Getting Started
@@ -24,13 +25,14 @@ A modern web application connecting Irish professionals with remote job opportun
 ### Prerequisites
 
 - Node.js 18+ and npm
-- MongoDB (local or cloud instance)
+- Supabase account (free tier works)
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-cd /Users/iggy/Desktop/desktop/CoachPackLocal/Sway
+git clone https://github.com/hello383/Sway.git
+cd Sway
 ```
 
 2. Install dependencies:
@@ -43,20 +45,26 @@ npm install
 cp .env.local.example .env.local
 ```
 
-Edit `.env.local` and add your MongoDB connection string:
+Edit `.env.local` and add your Supabase credentials:
 ```
-MONGODB_URI=mongodb://localhost:27017/sway
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 SENDGRID_API_KEY=your_sendgrid_api_key_here
 SENDGRID_FROM_EMAIL=noreply@sway.ie
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-4. Run the development server:
+4. Set up the database:
+   - Follow the instructions in `SUPABASE_SETUP.md` to create your Supabase project
+   - Run the SQL schema from `supabase/schema.sql` in your Supabase SQL Editor
+
+5. Run the development server:
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Project Structure
 
@@ -74,11 +82,13 @@ Sway/
 │   ├── page.tsx          # Landing page
 │   └── globals.css       # Global styles
 ├── lib/
-│   ├── db.ts            # MongoDB connection
-│   └── email.ts         # Email service
-├── models/
-│   ├── UserProfile.ts   # User profile schema
-│   └── JobPosting.ts    # Job posting schema
+│   ├── supabase.ts      # Supabase client
+│   ├── email.ts         # Email service
+│   ├── irishTowns.ts    # Irish towns data
+│   └── roles.ts         # Job roles data
+├── supabase/
+│   ├── schema.sql       # Database schema
+│   └── enable-rls.sql   # Row Level Security policies
 └── package.json
 ```
 

@@ -50,6 +50,7 @@ export async function PATCH(
     if (body.experience) updateData.experience = body.experience
     if (body.currentCompany !== undefined) updateData.current_company = body.currentCompany || null
     if (body.expectedSalary !== undefined) updateData.expected_salary = body.expectedSalary || null
+    if (body.linkedinUrl !== undefined) updateData.linkedin_url = body.linkedinUrl || null
     if (body.workHours) updateData.work_hours = body.workHours
     if (body.remoteRetreats !== undefined) updateData.remote_retreats = body.remoteRetreats || null
     if (body.workEnvironment !== undefined) updateData.work_environment = body.workEnvironment || null

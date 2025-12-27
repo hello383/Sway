@@ -1,0 +1,20 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="swayGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d946ef;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Rounded square background -->
+  <rect width="120" height="120" rx="24" fill="url(#swayGradient)"/>
+  
+  <!-- Zap/lightning bolt icon -->
+  <path d="M60 25 L45 60 L55 60 L50 95 L75 60 L65 60 L80 25 Z" 
+        fill="white" 
+        stroke="white" 
+        stroke-width="2"
+        transform="translate(20, 20)"/>
+</svg>
+

@@ -7,6 +7,10 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Sway - Ireland\'s Remote Job Database',
   description: 'Get notified about remote jobs or let employers find you. Powered by Grow Remote.',
+  icons: {
+    icon: '/sway-logo.svg',
+    apple: '/sway-logo.svg',
+  },
   // Google Search Console verification will be added here if using meta tag method
   // Format: verification: { google: 'verification-code-here' }
 }

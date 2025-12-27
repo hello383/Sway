@@ -325,7 +325,7 @@ export default function Home() {
       {/* Stats */}
       <section className="py-20 border-b border-[#27272a]">
         <div className="max-w-[1100px] mx-auto px-6">
-          <div className="grid grid-cols-4 gap-8 text-center max-md:grid-cols-2">
+            <div className="grid grid-cols-4 gap-8 text-center md:grid-cols-2 max-md:grid-cols-2">
             <div>
               <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">100k+</div>
               <div className="text-[13px] text-[#a1a1aa]">Remote jobs monthly in Europe</div>
@@ -347,22 +347,22 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="py-25 border-b border-[#27272a]">
+      <section className="py-24 border-b border-[#27272a]">
         <div className="max-w-[1100px] mx-auto px-6">
-          <h2 className="text-[28px] font-bold text-center mb-15">How it works</h2>
+          <h2 className="text-[28px] font-bold text-center mb-14">How it works</h2>
           <div className="grid grid-cols-3 gap-12 max-md:grid-cols-1 max-md:gap-10">
             <div className="text-center">
-              <div className="w-18 h-18 mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">1</div>
+              <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">1</div>
               <h3 className="text-lg font-semibold mb-2">Join the campaign</h3>
               <p className="text-sm text-[#a1a1aa] leading-[1.7]">Add your name to the campaign. Show Ireland there's demand for remote work in every county.</p>
             </div>
             <div className="text-center">
-              <div className="w-18 h-18 mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">2</div>
+              <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">2</div>
               <h3 className="text-lg font-semibold mb-2">Share the link</h3>
               <p className="text-sm text-[#a1a1aa] leading-[1.7]">Support the campaign by spreading the word. Every signup strengthens the case for national action.</p>
             </div>
             <div className="text-center">
-              <div className="w-18 h-18 mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">3</div>
+              <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">3</div>
               <h3 className="text-lg font-semibold mb-2">Join the database</h3>
               <p className="text-sm text-[#a1a1aa] leading-[1.7]">Sign up to become visible to remote employers actively hiring in Ireland.</p>
             </div>
@@ -372,7 +372,7 @@ export default function Home() {
 
       {/* Two purposes */}
       <section className="grid grid-cols-2 border-b border-[#27272a] max-md:grid-cols-1">
-        <div className="p-20 max-md:p-15 border-r border-[#27272a] max-md:border-r-0 max-md:border-b border-[#27272a]">
+        <div className="p-20 max-md:p-15 border-r border-[#27272a] max-md:border-r-0 max-md:border-b">
           <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For Ireland</div>
           <h3 className="text-2xl font-semibold mb-4">Build the evidence</h3>
           <p className="text-[15px] text-[#a1a1aa] leading-[1.7] mb-6">Every signup adds to the data. We're proving that demand exists—in every county—and building the case for a national remote employment target.</p>
@@ -412,7 +412,7 @@ export default function Home() {
       </section>
 
       {/* Follow the Campaign */}
-      <section className="py-25 text-center border-b border-[#27272a]">
+      <section className="py-24 text-center border-b border-[#27272a]">
         <div className="max-w-[1100px] mx-auto px-6">
           <h2 className="text-[32px] font-bold mb-4">Follow the campaign</h2>
           <p className="text-[17px] text-[#a1a1aa] mb-10 max-w-[560px] mx-auto">

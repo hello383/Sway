@@ -1,38 +1,112 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Users, MapPin, Briefcase, Zap, LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
-interface Stats {
-  totalProfessionals: number
-  citiesCovered: number
-  totalJobs: number
-}
+const IRISH_COUNTIES = [
+  'Carlow', 'Cavan', 'Clare', 'Cork', 'Donegal', 'Dublin', 'Galway', 'Kerry',
+  'Kildare', 'Kilkenny', 'Laois', 'Leitrim', 'Limerick', 'Longford', 'Louth',
+  'Mayo', 'Meath', 'Monaghan', 'Offaly', 'Roscommon', 'Sligo', 'Tipperary',
+  'Waterford', 'Westmeath', 'Wexford', 'Wicklow'
+]
+
+const SECTORS = [
+  'Technology / IT',
+  'Finance / Accounting',
+  'Marketing / Communications',
+  'Sales / Business Development',
+  'Design / Creative',
+  'HR / People Operations',
+  'Legal',
+  'Healthcare',
+  'Education / Training',
+  'Consulting / Professional Services',
+  'Admin / Operations',
+  'Customer Service / Support',
+  'Engineering',
+  'Other'
+]
+
+const TESTIMONIALS_ROW_1 = [
+  {
+    text: "Remote work let me move back to Donegal and still work for a tech company in London. My commute is now a walk on the beach.",
+    initial: "D",
+    role: "Design / Creative • Donegal"
+  },
+  {
+    text: "We hired 12 people across 8 counties last year. The talent is everywhere—you just need to know where to look.",
+    initial: "D",
+    role: "CEO • Dublin"
+  },
+  {
+    text: "After 15 years commuting to Dublin, I now work from my home office in Westport. I've gained back 3 hours every day.",
+    initial: "M",
+    role: "Technology / IT • Mayo"
+  },
+  {
+    text: "Remote employment is the biggest opportunity for rural Ireland since the IDA. We need to treat it with the same strategic focus.",
+    initial: "K",
+    role: "Consulting / Professional Services • Kerry"
+  },
+  {
+    text: "I was ready to emigrate. Then I found a fully remote role that let me stay in Galway. Best decision I never had to make.",
+    initial: "G",
+    role: "Marketing / Communications • Galway"
+  }
+]
+
+const TESTIMONIALS_ROW_2 = [
+  {
+    text: "The housing crisis pushed us out of Dublin. Remote work meant we could buy a house in Sligo and keep our careers.",
+    initial: "S",
+    role: "Technology / IT • Sligo"
+  },
+  {
+    text: "Our local hub went from empty to full in 18 months. Remote workers are revitalizing our main street.",
+    initial: "T",
+    role: "Admin / Operations • Tipperary"
+  },
+  {
+    text: "As a carer, office-based work was impossible. Remote work gave me a career without sacrificing family responsibilities.",
+    initial: "C",
+    role: "Customer Service / Support • Cork"
+  },
+  {
+    text: "100,000 remote jobs available monthly in Europe. Ireland should be competing for these like we compete for FDI.",
+    initial: "G",
+    role: "Founder • Galway"
+  },
+  {
+    text: "My team is spread across 4 time zones. We're more productive than any office-based team I've ever managed.",
+    initial: "L",
+    role: "VP Engineering • Limerick"
+  }
+]
 
 export default function Home() {
   const router = useRouter()
   const TARGET = 1500
-  const [stats, setStats] = useState<Stats>({
-    totalProfessionals: 0,
-    citiesCovered: 0,
-    totalJobs: 0,
-  })
-  const [activeTab, setActiveTab] = useState<'you' | 'movement'>('you')
+  const [stats, setStats] = useState({ totalProfessionals: 0 })
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    county: '',
+    sector: ''
+  })
+  const [submitting, setSubmitting] = useState(false)
+  const [formError, setFormError] = useState('')
 
   useEffect(() => {
+    // Fetch stats
     fetch('/api/stats')
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          setStats({
-            totalProfessionals: data.data.totalProfessionals,
-            citiesCovered: data.data.citiesCovered,
-            totalJobs: data.data.totalJobs,
-          })
+          setStats({ totalProfessionals: data.data.totalProfessionals || 0 })
         }
       })
       .catch(console.error)
@@ -52,60 +126,76 @@ export default function Home() {
     return () => subscription.unsubscribe()
   }, [])
 
-  const progressPercent = Math.min(
-    Math.round((stats.totalProfessionals / TARGET) * 100) || 0,
-    100
-  )
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormError('')
+    setSubmitting(true)
 
-  const forYouFeatures = [
-    {
-      title: 'Direct Matching',
-      description: 'Employers browse and contact aligned talent immediately.',
-    },
-    {
-      title: 'Signal Your Preferences',
-      description: 'Work hours, environment and communication style up front.',
-    },
-    {
-      title: 'Stay Private or Visible',
-      description: 'Choose public profiles or email-only notifications.',
-    },
-  ]
+    try {
+      const response = await fetch('/api/campaign-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
 
-  const movementFeatures = [
-    {
-      title: 'Data for Government',
-      description: 'Policy-ready dataset proving remote talent demand nationwide.',
-    },
-    {
-      title: 'Regional Targets',
-      description: 'County-level heat maps showing where infrastructure is needed.',
-    },
-    {
-      title: 'Employer Accountability',
-      description: 'Track companies supporting remote-first policies.',
-    },
-  ]
+      const data = await response.json()
+
+      if (data.success) {
+        setShowSuccessModal(true)
+        // Refresh stats
+        fetch('/api/stats')
+          .then((res) => res.json())
+          .then((statsData) => {
+            if (statsData.success) {
+              setStats({ totalProfessionals: statsData.data.totalProfessionals || 0 })
+            }
+          })
+          .catch(console.error)
+        // Reset form
+        setFormData({ name: '', email: '', county: '', sector: '' })
+      } else {
+        setFormError(data.error || 'Something went wrong')
+      }
+    } catch (error: any) {
+      setFormError(error.message || 'Failed to submit. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const closeModal = () => {
+    setShowSuccessModal(false)
+  }
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeModal()
+    }
+    if (showSuccessModal) {
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'unset'
+    }
+  }, [showSuccessModal])
 
   return (
-    <main className="min-h-screen bg-black text-white font-mono">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-3xl">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-fuchsia-500 rounded-lg flex items-center justify-center">
-              <Zap className="w-4 h-4" />
-            </div>
-            <span className="text-xl font-black tracking-tight">Sway</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="font-bold tabular-nums">
-                {stats.totalProfessionals.toLocaleString()}
-              </span>
-              <span className="text-white/50 text-sm">/ {TARGET.toLocaleString()}</span>
-            </div>
+    <>
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#09090b]/90 backdrop-blur-xl border-b border-[#27272a]">
+        <div className="max-w-[1100px] mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 font-semibold text-lg">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] rounded-lg"></div>
+            <span>Sway</span>
+          </Link>
+          <div className="flex items-center gap-5">
+            <span className="text-[13px] text-[#a1a1aa]">
+              <strong className="text-[#d946ef]">{stats.totalProfessionals.toLocaleString()}</strong> of {TARGET.toLocaleString()} signed up
+            </span>
             {isLoggedIn ? (
               <button
                 onClick={async () => {
@@ -113,260 +203,333 @@ export default function Home() {
                   router.push('/')
                   router.refresh()
                 }}
-                className="px-6 py-2 text-white/80 hover:text-white font-bold text-sm transition-colors flex items-center gap-2"
+                className="px-5 py-2.5 text-[#a1a1aa] hover:text-[#fafafa] text-sm font-medium transition-colors"
               >
-                <LogOut className="w-4 h-4" />
                 Sign Out
               </button>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="px-6 py-2 text-white/80 hover:text-white font-bold text-sm transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="px-6 py-2 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform"
-                >
-                  Join Now
-                </Link>
-              </>
+              <Link
+                href="/signup"
+                className="px-5 py-2.5 bg-[#fafafa] text-[#09090b] rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                Join now
+              </Link>
             )}
           </div>
         </div>
-      </header>
+      </nav>
 
       {/* Hero */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[150px] animate-pulse" />
-          <div
-            className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-fuchsia-600/30 rounded-full blur-[150px] animate-pulse"
-            style={{ animationDelay: '1s' }}
-          />
-        </div>
-        <div className="relative max-w-5xl mx-auto text-center">
-          <div className="mb-12">
-            <h1 className="text-7xl md:text-8xl font-black leading-[0.9] mb-4">
-              Data for
-              <br />
-              change.
-            </h1>
-            <h2 className="text-7xl md:text-8xl font-black leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400">
-              Jobs for you.
-            </h2>
-          </div>
-          <Link
-            href="/signup"
-            className="group inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 px-12 py-5 rounded-full font-bold text-lg hover:scale-105 transition-all shadow-2xl hover:shadow-purple-500/50 mb-16"
-          >
-            Join Sway
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 text-center">
-            <div>
-              <div className="text-4xl font-black mb-1 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400">
-                {stats.totalProfessionals.toLocaleString()}
-              </div>
-              <div className="text-xs text-white/50 uppercase tracking-widest">Signed Up</div>
+      <section className="pt-[140px] pb-20 text-center">
+        <div className="max-w-[1100px] mx-auto px-6">
+          <h1 className="text-[clamp(36px,6vw,56px)] font-bold leading-[1.15] mb-6 tracking-[-0.02em]">
+            Data for change.<br />Jobs for you.
+          </h1>
+          <p className="text-lg text-[#a1a1aa] max-w-[560px] mx-auto mb-10">
+            Register as remote-ready. Get discovered by employers. Help Ireland win a share of 100,000+ remote jobs available across Europe.
+          </p>
+
+          <form onSubmit={handleSubmit} className="max-w-[500px] mx-auto mb-4">
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <input
+                type="text"
+                placeholder="Your name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+                className="w-full px-[18px] py-3.5 bg-[#18181b] border border-[#27272a] rounded-lg text-[15px] text-[#fafafa] outline-none transition-colors focus:border-[#7c3aed] placeholder:text-[#a1a1aa]"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+                className="w-full px-[18px] py-3.5 bg-[#18181b] border border-[#27272a] rounded-lg text-[15px] text-[#fafafa] outline-none transition-colors focus:border-[#7c3aed] placeholder:text-[#a1a1aa]"
+              />
+              <select
+                value={formData.county}
+                onChange={(e) => setFormData({ ...formData, county: e.target.value })}
+                required
+                className="w-full px-[18px] py-3.5 pr-10 bg-[#18181b] border border-[#27272a] rounded-lg text-[15px] text-[#fafafa] outline-none transition-colors focus:border-[#7c3aed] appearance-none bg-[url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%23a1a1aa\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M8 11L3 6h10l-5 5z\'/%3E%3C/svg%3E')] bg-no-repeat bg-[right_14px_center]"
+              >
+                <option value="" disabled>County</option>
+                {IRISH_COUNTIES.map((county) => (
+                  <option key={county} value={county.toLowerCase()}>{county}</option>
+                ))}
+              </select>
+              <select
+                value={formData.sector}
+                onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
+                required
+                className="w-full px-[18px] py-3.5 pr-10 bg-[#18181b] border border-[#27272a] rounded-lg text-[15px] text-[#fafafa] outline-none transition-colors focus:border-[#7c3aed] appearance-none bg-[url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%23a1a1aa\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M8 11L3 6h10l-5 5z\'/%3E%3C/svg%3E')] bg-no-repeat bg-[right_14px_center]"
+              >
+                <option value="" disabled>Sector</option>
+                {SECTORS.map((sector) => (
+                  <option key={sector} value={sector}>{sector}</option>
+                ))}
+              </select>
             </div>
-            <div className="hidden md:block w-px h-12 bg-white/20" />
-            <div>
-              <div className="text-4xl font-black mb-1">{TARGET.toLocaleString()}</div>
-              <div className="text-xs text-white/50 uppercase tracking-widest">Target</div>
-            </div>
-            <div className="hidden md:block w-px h-12 bg-white/20" />
-            <div>
-              <div className="text-4xl font-black mb-1">{progressPercent}%</div>
-              <div className="text-xs text-white/50 uppercase tracking-widest">Progress</div>
-            </div>
-          </div>
+            {formError && (
+              <p className="text-sm text-red-400 mb-3 text-left">{formError}</p>
+            )}
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full px-5 py-2.5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] text-white rounded-md text-sm font-medium hover:shadow-[0_8px_24px_rgba(124,58,237,0.3)] transition-all disabled:opacity-50"
+            >
+              {submitting ? 'Joining...' : 'Join the campaign'}
+            </button>
+          </form>
         </div>
       </section>
 
-      {/* Pill Toggle Section */}
-      <section className="relative border-y border-white/10 py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-4 mb-12">
-            {['you', 'movement'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab as 'you' | 'movement')}
-                className={`flex-1 px-10 py-4 rounded-full font-bold text-xl transition-all border-2 ${
-                  activeTab === tab
-                    ? 'bg-white text-black border-white'
-                    : 'bg-transparent text-white/60 border-white/20 hover:text-white/80 hover:border-white/30'
-                }`}
-              >
-                {tab === 'you' ? 'For You' : 'The Movement'}
-              </button>
+      {/* Scrolling Testimonials */}
+      <section className="py-12 border-t border-b border-[#27272a] overflow-hidden">
+        <div className="relative">
+          <div className="absolute left-0 top-0 bottom-0 w-[120px] bg-gradient-to-r from-[#09090b] to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-[120px] bg-gradient-to-l from-[#09090b] to-transparent z-10 pointer-events-none"></div>
+          
+          {/* Row 1 */}
+          <div className="flex gap-6 w-max animate-scroll hover:[animation-play-state:paused]">
+            {[...TESTIMONIALS_ROW_1, ...TESTIMONIALS_ROW_1].map((testimonial, idx) => (
+              <div key={`row1-${idx}`} className="flex-shrink-0 w-[340px] p-6 bg-[#18181b] border border-[#27272a] rounded-xl transition-all hover:border-[#7c3aed] hover:-translate-y-0.5">
+                <p className="text-sm leading-[1.7] text-[#fafafa] mb-4">{testimonial.text}</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#d946ef] flex items-center justify-center font-semibold text-xs text-white">
+                    {testimonial.initial}
+                  </div>
+                  <div className="text-[11px] text-[#a1a1aa]">{testimonial.role}</div>
+                </div>
+              </div>
             ))}
           </div>
 
-          <div className="min-h-[350px]">
-            {activeTab === 'you' ? (
-              <>
-                <div className="flex items-center gap-5 mb-8">
-                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                    <Briefcase className="w-7 h-7" />
+          {/* Row 2 - Reverse */}
+          <div className="flex gap-6 w-max mt-6 animate-scroll-reverse hover:[animation-play-state:paused]">
+            {[...TESTIMONIALS_ROW_2, ...TESTIMONIALS_ROW_2].map((testimonial, idx) => (
+              <div key={`row2-${idx}`} className="flex-shrink-0 w-[340px] p-6 bg-[#18181b] border border-[#27272a] rounded-xl transition-all hover:border-[#7c3aed] hover:-translate-y-0.5">
+                <p className="text-sm leading-[1.7] text-[#fafafa] mb-4">{testimonial.text}</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#d946ef] flex items-center justify-center font-semibold text-xs text-white">
+                    {testimonial.initial}
                   </div>
-                  <div>
-                    <h3 className="text-3xl font-black mb-1">For You</h3>
-                    <p className="text-sm text-white/50">Immediate value</p>
-                  </div>
+                  <div className="text-[11px] text-[#a1a1aa]">{testimonial.role}</div>
                 </div>
-                <p className="text-lg text-white/70 mb-10 leading-relaxed">
-                  Companies browse profiles. They reach out. You interview. You get hired.
-                </p>
-                <div className="grid md:grid-cols-3 gap-6">
-                  {forYouFeatures.map((feature) => (
-                    <div key={feature.title} className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                      <h4 className="font-bold mb-2">{feature.title}</h4>
-                      <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center gap-5 mb-8">
-                  <div className="w-14 h-14 bg-gradient-to-br from-fuchsia-500 to-pink-500 rounded-2xl flex items-center justify-center">
-                    <MapPin className="w-7 h-7" />
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-black mb-1">The Movement</h3>
-                    <p className="text-sm text-white/50">Systems change</p>
-                  </div>
-                </div>
-                <p className="text-lg text-white/70 mb-10 leading-relaxed">
-                  Every profile proves demand for remote-first infrastructure across Ireland.
-                </p>
-                <div className="grid md:grid-cols-3 gap-6">
-                  {movementFeatures.map((feature) => (
-                    <div key={feature.title} className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                      <h4 className="font-bold mb-2">{feature.title}</h4>
-                      <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Track the Movement */}
-      <section className="relative py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-3 px-5 py-2 bg-green-500/20 border border-green-500/30 rounded-full mb-6">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="font-bold text-xs uppercase tracking-widest">Live Campaign</span>
+      {/* Stats */}
+      <section className="py-20 border-b border-[#27272a]">
+        <div className="max-w-[1100px] mx-auto px-6">
+          <div className="grid grid-cols-4 gap-8 text-center max-md:grid-cols-2">
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">100k+</div>
+              <div className="text-[13px] text-[#a1a1aa]">Remote jobs monthly in Europe</div>
             </div>
-            <h2 className="text-5xl font-black mb-3">Track the Movement</h2>
-            <p className="text-base text-white/60 max-w-2xl mx-auto">
-              Real-time progress toward government targets and policy change.
-            </p>
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">€108M</div>
+              <div className="text-[13px] text-[#a1a1aa]">Potential annual tax revenue</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">10%</div>
+              <div className="text-[13px] text-[#a1a1aa]">Our target for Ireland</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">32</div>
+              <div className="text-[13px] text-[#a1a1aa]">Counties to cover</div>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-10 mb-10">
+      {/* How it works */}
+      <section className="py-25 border-b border-[#27272a]">
+        <div className="max-w-[1100px] mx-auto px-6">
+          <h2 className="text-[28px] font-bold text-center mb-15">How it works</h2>
+          <div className="grid grid-cols-3 gap-12 max-md:grid-cols-1 max-md:gap-10">
             <div className="text-center">
-              <div className="mb-6">
-                <div className="text-7xl font-black tabular-nums mb-1">
-                  {stats.totalProfessionals.toLocaleString()}
-                </div>
-                <div className="text-sm text-white/50">people signed up</div>
-              </div>
-              <div className="max-w-3xl mx-auto mb-6">
-                <div className="relative h-4 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500 transition-all duration-700 relative"
-                    style={{ width: `${progressPercent}%` }}
-                  >
-                    <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                  </div>
-                </div>
-                <div className="flex justify-between mt-2 text-xs text-white/50">
-                  <span>0</span>
-                  <span className="font-bold text-white/60">Target: {TARGET.toLocaleString()}</span>
-                </div>
-              </div>
-              <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400 mb-2">
-                {progressPercent}%
-              </div>
-              <p className="text-sm text-white/50">At {TARGET.toLocaleString()}: Dataset → Government → Database Opens</p>
+              <div className="w-18 h-18 mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">1</div>
+              <h3 className="text-lg font-semibold mb-2">Join the campaign</h3>
+              <p className="text-sm text-[#a1a1aa] leading-[1.7]">Add your name to the campaign. Show Ireland there's demand for remote work in every county.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-18 h-18 mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">2</div>
+              <h3 className="text-lg font-semibold mb-2">Share the link</h3>
+              <p className="text-sm text-[#a1a1aa] leading-[1.7]">Support the campaign by spreading the word. Every signup strengthens the case for national action.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-18 h-18 mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">3</div>
+              <h3 className="text-lg font-semibold mb-2">Join the database</h3>
+              <p className="text-sm text-[#a1a1aa] leading-[1.7]">Sign up to become visible to remote employers actively hiring in Ireland.</p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div>
-            <h3 className="text-xl font-black text-center mb-6">What We&apos;re Tracking</h3>
-            <div className="grid md:grid-cols-3 gap-5">
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-11 h-11 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                    <Users className="w-5 h-5 text-purple-400" />
-                  </div>
-                  <div className="text-right">
-                    <div className="text-3xl font-black">
-                      {stats.totalProfessionals.toLocaleString()}
-                    </div>
-                  </div>
-                </div>
-                <h4 className="font-bold mb-1.5">Platform Signups</h4>
-                <p className="text-white/50 text-xs leading-relaxed">Proving demand for infrastructure.</p>
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-11 h-11 bg-fuchsia-500/20 rounded-xl flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-fuchsia-400" />
-                  </div>
-                  <div className="text-3xl font-black">{stats.citiesCovered}</div>
-                </div>
-                <h4 className="font-bold mb-1.5">Counties Active</h4>
-                <p className="text-white/50 text-xs leading-relaxed">Showing remote-ready towns nationwide.</p>
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-11 h-11 bg-pink-500/20 rounded-xl flex items-center justify-center">
-                    <Briefcase className="w-5 h-5 text-pink-400" />
-                  </div>
-                  <div className="text-3xl font-black">{stats.totalJobs.toLocaleString()}</div>
-                </div>
-                <h4 className="font-bold mb-1.5">Opportunities Logged</h4>
-                <p className="text-white/50 text-xs leading-relaxed">Tracking which roles come fully remote.</p>
-              </div>
-            </div>
+      {/* Two purposes */}
+      <section className="grid grid-cols-2 border-b border-[#27272a] max-md:grid-cols-1">
+        <div className="p-20 max-md:p-15 border-r border-[#27272a] max-md:border-r-0 max-md:border-b border-[#27272a]">
+          <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For Ireland</div>
+          <h3 className="text-2xl font-semibold mb-4">Build the evidence</h3>
+          <p className="text-[15px] text-[#a1a1aa] leading-[1.7] mb-6">Every signup adds to the data. We're proving that demand exists—in every county—and building the case for a national remote employment target.</p>
+          <ul className="list-none space-y-2.5">
+            <li className="flex items-start gap-2.5 text-sm text-[#a1a1aa]">
+              <span className="text-[#7c3aed]">→</span>
+              <span>Demonstrate geographic distribution of talent</span>
+            </li>
+            <li className="flex items-start gap-2.5 text-sm text-[#a1a1aa]">
+              <span className="text-[#7c3aed]">→</span>
+              <span>Show skills and salary data to policymakers</span>
+            </li>
+            <li className="flex items-start gap-2.5 text-sm text-[#a1a1aa]">
+              <span className="text-[#7c3aed]">→</span>
+              <span>Support the push for national investment</span>
+            </li>
+          </ul>
+        </div>
+        <div className="p-20 max-md:p-15">
+          <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For you</div>
+          <h3 className="text-2xl font-semibold mb-4">Get found by employers</h3>
+          <ul className="list-none space-y-2.5">
+            <li className="flex items-start gap-2.5 text-sm text-[#a1a1aa]">
+              <span className="text-[#7c3aed]">→</span>
+              <span>Simple less than 5 minute sign up</span>
+            </li>
+            <li className="flex items-start gap-2.5 text-sm text-[#a1a1aa]">
+              <span className="text-[#7c3aed]">→</span>
+              <span>Choose visibility: be searchable or get email alerts only</span>
+            </li>
+            <li className="flex items-start gap-2.5 text-sm text-[#a1a1aa]">
+              <span className="text-[#7c3aed]">→</span>
+              <span>Your data stays private until you choose to share</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Follow the Campaign */}
+      <section className="py-25 text-center border-b border-[#27272a]">
+        <div className="max-w-[1100px] mx-auto px-6">
+          <h2 className="text-[32px] font-bold mb-4">Follow the campaign</h2>
+          <p className="text-[17px] text-[#a1a1aa] mb-10 max-w-[560px] mx-auto">
+            The national advocacy work is led by <a href="https://growremote.ie" target="_blank" rel="noopener noreferrer" className="text-[#7c3aed] hover:underline">Grow Remote</a>, Ireland's non-profit solving the problems of remote work.
+          </p>
+          <div className="grid grid-cols-2 gap-4 max-w-[600px] mx-auto max-md:grid-cols-1">
+            <a
+              href="https://www.irishtimes.com/business/work/2025/12/10/more-than-8000-submissions-made-on-right-to-request-remote-working/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-4 bg-[#18181b] border border-[#27272a] rounded-xl text-[#fafafa] transition-all hover:border-[#7c3aed] hover:bg-[rgba(139,92,246,0.05)]"
+            >
+              <span className="text-xl">📊</span>
+              <span className="text-sm font-medium">Compiling and publishing data</span>
+            </a>
+            <a
+              href="https://growremote.ie/wp-content/uploads/2025/08/Grow-Remote-Pre-Budget-Submission-2026-1.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-4 bg-[#18181b] border border-[#27272a] rounded-xl text-[#fafafa] transition-all hover:border-[#7c3aed] hover:bg-[rgba(139,92,246,0.05)]"
+            >
+              <span className="text-xl">🏛️</span>
+              <span className="text-sm font-medium">Advocating for a national target</span>
+            </a>
+            <a
+              href="https://growremote.ie/why-irelands-eu-presidency-should-champion-remote-employment/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-4 bg-[#18181b] border border-[#27272a] rounded-xl text-[#fafafa] transition-all hover:border-[#7c3aed] hover:bg-[rgba(139,92,246,0.05)]"
+            >
+              <span className="text-xl">🇪🇺</span>
+              <span className="text-sm font-medium">Advocating for EU change</span>
+            </a>
+            <a
+              href="https://growremote.ie/blog/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-4 bg-[#18181b] border border-[#27272a] rounded-xl text-[#fafafa] transition-all hover:border-[#7c3aed] hover:bg-[rgba(139,92,246,0.05)]"
+            >
+              <span className="text-xl">📰</span>
+              <span className="text-sm font-medium">Keep up to date</span>
+            </a>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-8 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-white/50 text-sm">
-              © {new Date().getFullYear()} Sway. Powered by Grow Remote.
+      <footer className="py-8 px-6">
+        <div className="max-w-[1100px] mx-auto flex justify-between items-center flex-wrap gap-4 max-md:flex-col max-md:text-center">
+          <Link href="/" className="flex items-center gap-2.5 font-semibold text-lg">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] rounded-lg"></div>
+            <span>Sway</span>
+          </Link>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-[13px] text-[#a1a1aa] hover:text-[#fafafa] transition-colors">Privacy</Link>
+            <Link href="/terms" className="text-[13px] text-[#a1a1aa] hover:text-[#fafafa] transition-colors">Terms</Link>
+            <Link href="/contact" className="text-[13px] text-[#a1a1aa] hover:text-[#fafafa] transition-colors">Contact</Link>
+          </div>
+          <span className="text-xs text-[#a1a1aa]">© {new Date().getFullYear()} Sway</span>
+        </div>
+      </footer>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div
+          className="fixed inset-0 bg-black/80 z-[1000] flex items-center justify-center p-6"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-[#18181b] border border-[#27272a] rounded-[20px] p-10 max-w-[440px] w-full text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] rounded-full flex items-center justify-center text-[28px] text-white">
+              ✓
             </div>
-            <div className="flex items-center gap-6">
+            <h3 className="text-xl font-semibold mb-2">You're in!</h3>
+            <p className="text-sm text-[#a1a1aa] mb-5">
+              Thanks for joining the campaign. You're helping bring remote jobs to every corner of Ireland.
+            </p>
+            <p className="text-sm text-[#a1a1aa] mb-5">
+              Want employers to find you directly? Complete your profile to become visible to remote-first companies.
+            </p>
+            <div className="flex flex-col gap-3">
               <Link
-                href="/privacy"
-                className="text-white/50 hover:text-white text-sm transition-colors"
+                href="/signup"
+                className="px-5 py-2.5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] text-white rounded-md text-sm font-medium hover:shadow-[0_8px_24px_rgba(124,58,237,0.3)] transition-all"
+                onClick={closeModal}
               >
-                Privacy Policy
+                Complete my profile
               </Link>
-              <Link
-                href="/terms"
-                className="text-white/50 hover:text-white text-sm transition-colors"
+              <button
+                onClick={closeModal}
+                className="px-5 py-2.5 bg-transparent border border-[#27272a] text-[#fafafa] rounded-md text-sm font-medium hover:border-[#7c3aed] hover:bg-[rgba(124,58,237,0.1)] transition-all"
               >
-                Terms & Conditions
-              </Link>
+                Maybe later
+              </button>
             </div>
           </div>
         </div>
-      </footer>
-    </main>
+      )}
+
+      <style jsx>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes scroll-reverse {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+        .animate-scroll {
+          animation: scroll 50s linear infinite;
+        }
+        .animate-scroll-reverse {
+          animation: scroll-reverse 55s linear infinite;
+        }
+      `}</style>
+    </>
   )
 }
-

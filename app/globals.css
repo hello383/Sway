@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --violet: #7c3aed;
+  --purple: #9333ea;
+  --fuchsia: #d946ef;
+  --bg: #09090b;
+  --surface: #18181b;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --border: #27272a;
+}
+
 @layer base {
   body {
-    @apply bg-gray-950 text-white;
+    @apply bg-[#09090b] text-[#fafafa];
+    font-family: var(--font-sora), sans-serif;
   }
 }
 

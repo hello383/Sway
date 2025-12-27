@@ -44,11 +44,12 @@ function AuthCallbackContent() {
         }
 
         // Redirect based on profile status
-        if (profile && profile.id) {
-          // User has a profile - redirect to profile page
+        // Only redirect to profile if they have a complete profile (visible or email), not campaign_only
+        if (profile && profile.id && (profile.profile_visibility === 'visible' || profile.profile_visibility === 'email')) {
+          // User has a complete profile - redirect to profile page
           router.push('/profile')
         } else {
-          // User doesn't have a profile - redirect to signup to complete profile
+          // User doesn't have a profile or has campaign_only - redirect to signup to complete profile
           router.push(`/signup?oauth=success&email=${encodeURIComponent(userEmail)}`)
         }
       } catch (error: any) {

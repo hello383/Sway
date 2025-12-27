@@ -223,10 +223,16 @@ function SignUpContent() {
               .eq('email', userEmail.toLowerCase())
               .maybeSingle()
 
-            if (profile && profile.id) {
-              // User has a profile - redirect to profile page
+            // Only redirect to profile if they have a complete profile (visible or email), not campaign_only
+            if (profile && profile.id && (profile.profile_visibility === 'visible' || profile.profile_visibility === 'email')) {
+              // User has a complete profile - redirect to profile page
               router.push('/profile')
               return
+            } else if (profile && profile.id && profile.profile_visibility === 'campaign_only') {
+              // User has a campaign_only profile - pre-fill email and allow them to complete signup
+              updateField('email', userEmail)
+              // Don't redirect - let them complete the profile
+            }
             } else {
               // User is signed in but no profile - show OAuth signup flow
               setIsOAuthUser(true)

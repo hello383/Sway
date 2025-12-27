@@ -200,7 +200,15 @@ export default function Profile() {
     )
   }
 
-  if (!profile || shouldRedirect) return null
+  // Don't render if redirecting or if profile is campaign_only
+  if (shouldRedirect) return null
+  if (!profile) return null
+  if (profile.profile_visibility?.toLowerCase()?.trim() === 'campaign_only' || 
+      profile.profile_visibility?.toLowerCase()?.trim() === 'campaign only') {
+    // Force redirect if somehow we got here
+    window.location.href = '/signup'
+    return null
+  }
 
   return (
     <main className="min-h-screen bg-gray-950 py-12 px-4">

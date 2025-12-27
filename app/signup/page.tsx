@@ -194,7 +194,7 @@ function SignUpContent() {
     workHours: '',
     remoteRetreats: '',
     workEnvironment: '',
-    profileVisibility: '',
+    profileVisibility: 'email', // Default to email/mailer
     governmentCampaign: false,
     campaignReason: '',
   })
@@ -997,9 +997,9 @@ function SignUpContent() {
           {/* Step 3: Profile Visibility */}
           {step === 3 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold mb-6">Profile Visibility</h2>
+              <h2 className="text-2xl font-bold mb-6">How would you like to use Sway?</h2>
               <p className="text-white/70 mb-6">
-                Choose how you want to use Sway:
+                Choose how employers can find you and how you'll receive opportunities:
               </p>
 
               <div className="space-y-4">
@@ -1034,7 +1034,7 @@ function SignUpContent() {
                       </div>
                       <div>
                         <h3 className="font-bold text-lg mb-2">
-                          Make my profile visible to employers
+                          I&apos;m open to career moves - make my profile visible to employers
                         </h3>
                         <p className="text-white/70 text-sm">
                           Your profile will be searchable by employers. They can discover
@@ -1076,7 +1076,7 @@ function SignUpContent() {
                       </div>
                       <div>
                         <h3 className="font-bold text-lg mb-2">
-                          Email me about remote jobs
+                          Add me to the mailer
                         </h3>
                         <p className="text-white/70 text-sm">
                           Your profile stays private. You&apos;ll receive email notifications
@@ -1124,7 +1124,7 @@ function SignUpContent() {
                       </div>
                       <div>
                         <h3 className="font-bold text-lg mb-2">
-                          Join the campaign and don&apos;t include me in the database
+                          I&apos;m not open to career moves, just add me to the campaign
                         </h3>
                         <p className="text-white/70 text-sm">
                           Support Grow Remote&apos;s mission to get the Irish government to set

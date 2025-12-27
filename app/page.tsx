@@ -412,16 +412,16 @@ export default function Home() {
             <div>
               <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent transition-all duration-300" id="taxValue">€10.8M</div>
               <div className="text-[13px] text-[#a1a1aa]">Annual tax revenue</div>
-            </div>
+                </div>
             <div>
               <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent transition-all duration-300" id="gdpValue">€20M</div>
               <div className="text-[13px] text-[#a1a1aa]">GDP contribution</div>
-            </div>
+              </div>
             <div>
               <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">80%</div>
               <div className="text-[13px] text-[#a1a1aa]">Gain extra time locally</div>
-            </div>
-          </div>
+                  </div>
+                </div>
 
           <p className="text-center text-xs text-[#a1a1aa] mt-8">
             Based on 100,000+ remote jobs advertised monthly across Europe
@@ -454,8 +454,8 @@ export default function Home() {
       </section>
 
       {/* Two purposes */}
-      <section className="grid grid-cols-2 border-b border-[#27272a] md:grid-cols-1">
-        <div className="p-20 md:p-16 border-r border-[#27272a] md:border-r-0 md:border-b">
+      <section className="grid grid-cols-2 border-b border-[#27272a] max-md:grid-cols-1">
+        <div className="p-20 max-md:p-16 border-r border-[#27272a] max-md:border-r-0 max-md:border-b">
           <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For Ireland</div>
           <h3 className="text-2xl font-semibold mb-4">Build the evidence</h3>
           <p className="text-[15px] text-[#a1a1aa] leading-[1.7] mb-6">Every signup adds to the data. We're proving that demand exists—in every county—and building the case for a national remote employment target.</p>
@@ -473,8 +473,8 @@ export default function Home() {
               <span>Support the push for national investment</span>
             </li>
           </ul>
-        </div>
-        <div className="p-20 md:p-16">
+                  </div>
+        <div className="p-20 max-md:p-16">
           <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For you</div>
           <h3 className="text-2xl font-semibold mb-4">Get found by employers</h3>
           <ul className="list-none space-y-2.5">

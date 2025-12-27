@@ -85,7 +85,8 @@ export default function Profile() {
         if (data.profile_visibility === 'campaign_only') {
           setShouldRedirect(true)
           setLoading(false)
-          router.push('/signup')
+          // Use window.location for immediate redirect (router.push can be slow)
+          window.location.href = '/signup'
           return
         }
 

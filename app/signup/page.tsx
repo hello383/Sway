@@ -654,6 +654,8 @@ function SignUpContent() {
                   onChange={(e) => updateField('email', e.target.value)}
                   className="w-full px-4 py-3 bg-gray-900 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
+                  pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                  title="Please enter a valid email address"
                   disabled={isOAuthUser}
                 />
                 {isOAuthUser && (

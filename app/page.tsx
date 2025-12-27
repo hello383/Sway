@@ -293,6 +293,8 @@ export default function Home() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                title="Please enter a valid email address"
                 className="w-full px-[18px] py-3.5 bg-[#18181b] border border-[#27272a] rounded-lg text-[15px] text-[#fafafa] outline-none transition-colors focus:border-[#7c3aed] placeholder:text-[#a1a1aa]"
               />
               <select

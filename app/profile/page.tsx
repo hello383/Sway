@@ -48,6 +48,7 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false)
   const [stats, setStats] = useState<Stats | null>(null)
   const [editForm, setEditForm] = useState<Partial<Profile>>({})
+  const [shouldRedirect, setShouldRedirect] = useState(false)
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -83,6 +84,7 @@ export default function Profile() {
         // If user has campaign_only profile, redirect them to signup to complete it
         if (data.profile_visibility === 'campaign_only') {
           router.push('/signup')
+          setShouldRedirect(true)
           return
         }
 

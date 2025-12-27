@@ -199,6 +199,8 @@ export default function Login() {
               </label>
               <input
                 type="email"
+                pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                title="Please enter a valid email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required

@@ -34,6 +34,34 @@ function SuccessContent() {
   const [userCounty, setUserCounty] = useState<string | null>(null)
 
   useEffect(() => {
+    // Check if user is logged in - if so, redirect to profile page
+    const checkAndRedirect = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session?.user?.email) {
+          // User is logged in - check if they have a profile
+          const { data: profile } = await supabase
+            .from('user_profiles')
+            .select('id')
+            .eq('email', session.user.email.toLowerCase())
+            .maybeSingle()
+
+          if (profile && profile.id) {
+            // User has a profile - redirect to profile page
+            router.push('/profile')
+            return
+          }
+        }
+      } catch (error) {
+        console.error('Error checking session:', error)
+      }
+    }
+
+    checkAndRedirect()
+  }, [router])
+
+  useEffect(() => {
     // Fetch stats
     fetch('/api/stats')
       .then((res) => res.json())

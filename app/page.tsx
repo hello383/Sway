@@ -350,7 +350,7 @@ export default function Home() {
       <section className="py-24 border-b border-[#27272a]">
         <div className="max-w-[1100px] mx-auto px-6">
           <h2 className="text-[28px] font-bold text-center mb-14">How it works</h2>
-          <div className="grid grid-cols-3 gap-12 max-md:grid-cols-1 max-md:gap-10">
+          <div className="grid grid-cols-3 gap-12 md:grid-cols-1 md:gap-10">
             <div className="text-center">
               <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">1</div>
               <h3 className="text-lg font-semibold mb-2">Join the campaign</h3>

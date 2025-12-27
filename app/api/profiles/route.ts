@@ -103,6 +103,38 @@ export async function POST(request: NextRequest) {
     if (error) {
       // Handle unique constraint violation (duplicate email)
       if (error.code === '23505') {
+        // Check if existing profile is campaign_only - if so, UPDATE it instead
+        const { data: existingProfile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('id, profile_visibility')
+          .eq('email', email)
+          .maybeSingle()
+
+        if (existingProfile && 
+            (existingProfile.profile_visibility === 'campaign_only' || 
+             existingProfile.profile_visibility?.toLowerCase()?.trim() === 'campaign_only')) {
+          // Update existing campaign_only profile to complete profile
+          const { data: updatedData, error: updateError } = await supabaseAdmin
+            .from('user_profiles')
+            .update({
+              ...profileData,
+              profile_visibility: body.profileVisibility, // Update visibility
+            })
+            .eq('id', existingProfile.id)
+            .select()
+            .single()
+
+          if (updateError) {
+            throw updateError
+          }
+
+          // Send welcome email
+          const { sendWelcomeEmail } = await import('@/lib/email')
+          await sendWelcomeEmail(updatedData.email, updatedData.full_name, updatedData.profile_visibility)
+
+          return NextResponse.json({ success: true, data: updatedData }, { status: 200 })
+        }
+
         return NextResponse.json(
           { success: false, error: 'Email already registered' },
           { status: 400 }

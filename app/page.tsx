@@ -433,7 +433,7 @@ export default function Home() {
       <section className="py-24 border-b border-[#27272a]">
         <div className="max-w-[1100px] mx-auto px-6">
           <h2 className="text-[28px] font-bold text-center mb-14">How it works</h2>
-          <div className="grid grid-cols-3 gap-12 md:grid-cols-1 md:gap-10">
+          <div className="grid grid-cols-3 gap-8 max-md:grid-cols-1 max-md:gap-10">
             <div className="text-center">
               <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">1</div>
               <h3 className="text-lg font-semibold mb-2">Join the campaign</h3>
@@ -501,7 +501,7 @@ export default function Home() {
           <p className="text-[17px] text-[#a1a1aa] mb-10 max-w-[560px] mx-auto">
             The national advocacy work is led by <a href="https://growremote.ie" target="_blank" rel="noopener noreferrer" className="text-[#7c3aed] hover:underline">Grow Remote</a>, Ireland's non-profit solving the problems of remote work.
           </p>
-          <div className="grid grid-cols-2 gap-4 max-w-[600px] mx-auto md:grid-cols-1">
+          <div className="grid grid-cols-2 gap-4 max-w-[600px] mx-auto max-md:grid-cols-1">
             <a
               href="https://www.irishtimes.com/business/work/2025/12/10/more-than-8000-submissions-made-on-right-to-request-remote-working/"
               target="_blank"

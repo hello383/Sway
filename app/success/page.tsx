@@ -32,6 +32,7 @@ function SuccessContent() {
 
   const [stats, setStats] = useState<Stats | null>(null)
   const [userCounty, setUserCounty] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in - if so, redirect to profile page
@@ -40,6 +41,7 @@ function SuccessContent() {
         const { data: { session } } = await supabase.auth.getSession()
         
         if (session?.user?.email) {
+          setIsLoggedIn(true)
           // User is logged in - check if they have a profile
           const { data: profile } = await supabase
             .from('user_profiles')
@@ -201,10 +203,10 @@ function SuccessContent() {
           <div className="flex gap-4 justify-center flex-wrap">
             {visibility !== 'campaign_only' && (
               <Link
-                href="/login"
+                href={isLoggedIn ? "/profile" : "/login"}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-bold transition-all"
               >
-                Sign In to Your Profile
+                {isLoggedIn ? "View My Profile" : "Sign In to Your Profile"}
               </Link>
             )}
             <Link

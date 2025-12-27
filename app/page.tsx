@@ -195,7 +195,7 @@ export default function Home() {
           <div className="flex items-center gap-5">
             <span className="text-[13px] text-[#a1a1aa]">
               <strong className="text-[#d946ef]">{stats.totalProfessionals.toLocaleString()}</strong> of {TARGET.toLocaleString()} signed up
-            </span>
+              </span>
             {isLoggedIn ? (
               <button
                 onClick={async () => {
@@ -208,12 +208,12 @@ export default function Home() {
                 Sign Out
               </button>
             ) : (
-              <Link
-                href="/signup"
+            <Link
+              href="/signup"
                 className="px-5 py-2.5 bg-[#fafafa] text-[#09090b] rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
-              >
+            >
                 Join now
-              </Link>
+            </Link>
             )}
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function Home() {
           </p>
 
           <form onSubmit={handleSubmit} className="max-w-[500px] mx-auto mb-4">
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-2 gap-3 mb-3 max-[500px]:grid-cols-1">
               <input
                 type="text"
                 placeholder="Your name"
@@ -301,9 +301,9 @@ export default function Home() {
                   </div>
                   <div className="text-[11px] text-[#a1a1aa]">{testimonial.role}</div>
                 </div>
-              </div>
-            ))}
-          </div>
+                    </div>
+                  ))}
+                </div>
 
           {/* Row 2 - Reverse */}
           <div className="flex gap-6 w-max mt-6 animate-scroll-reverse hover:[animation-play-state:paused]">
@@ -316,8 +316,8 @@ export default function Home() {
                   </div>
                   <div className="text-[11px] text-[#a1a1aa]">{testimonial.role}</div>
                 </div>
-              </div>
-            ))}
+                    </div>
+                  ))}
           </div>
         </div>
       </section>
@@ -325,7 +325,7 @@ export default function Home() {
       {/* Stats */}
       <section className="py-20 border-b border-[#27272a]">
         <div className="max-w-[1100px] mx-auto px-6">
-            <div className="grid grid-cols-4 gap-8 text-center md:grid-cols-2 max-md:grid-cols-2">
+            <div className="grid grid-cols-4 gap-8 text-center md:grid-cols-2">
             <div>
               <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">100k+</div>
               <div className="text-[13px] text-[#a1a1aa]">Remote jobs monthly in Europe</div>
@@ -355,12 +355,12 @@ export default function Home() {
               <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">1</div>
               <h3 className="text-lg font-semibold mb-2">Join the campaign</h3>
               <p className="text-sm text-[#a1a1aa] leading-[1.7]">Add your name to the campaign. Show Ireland there's demand for remote work in every county.</p>
-            </div>
+                </div>
             <div className="text-center">
               <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">2</div>
               <h3 className="text-lg font-semibold mb-2">Share the link</h3>
               <p className="text-sm text-[#a1a1aa] leading-[1.7]">Support the campaign by spreading the word. Every signup strengthens the case for national action.</p>
-            </div>
+              </div>
             <div className="text-center">
               <div className="w-[72px] h-[72px] mx-auto mb-5 bg-gradient-to-br from-[#7c3aed] to-[#9333ea] rounded-2xl flex items-center justify-center text-[28px] font-bold text-white">3</div>
               <h3 className="text-lg font-semibold mb-2">Join the database</h3>
@@ -371,8 +371,8 @@ export default function Home() {
       </section>
 
       {/* Two purposes */}
-      <section className="grid grid-cols-2 border-b border-[#27272a] max-md:grid-cols-1">
-        <div className="p-20 max-md:p-15 border-r border-[#27272a] max-md:border-r-0 max-md:border-b">
+      <section className="grid grid-cols-2 border-b border-[#27272a] md:grid-cols-1">
+        <div className="p-20 md:p-15 border-r border-[#27272a] md:border-r-0 md:border-b">
           <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For Ireland</div>
           <h3 className="text-2xl font-semibold mb-4">Build the evidence</h3>
           <p className="text-[15px] text-[#a1a1aa] leading-[1.7] mb-6">Every signup adds to the data. We're proving that demand exists—in every county—and building the case for a national remote employment target.</p>
@@ -390,8 +390,8 @@ export default function Home() {
               <span>Support the push for national investment</span>
             </li>
           </ul>
-        </div>
-        <div className="p-20 max-md:p-15">
+                  </div>
+        <div className="p-20 md:p-15">
           <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For you</div>
           <h3 className="text-2xl font-semibold mb-4">Get found by employers</h3>
           <ul className="list-none space-y-2.5">
@@ -408,7 +408,7 @@ export default function Home() {
               <span>Your data stays private until you choose to share</span>
             </li>
           </ul>
-        </div>
+                    </div>
       </section>
 
       {/* Follow the Campaign */}
@@ -418,7 +418,7 @@ export default function Home() {
           <p className="text-[17px] text-[#a1a1aa] mb-10 max-w-[560px] mx-auto">
             The national advocacy work is led by <a href="https://growremote.ie" target="_blank" rel="noopener noreferrer" className="text-[#7c3aed] hover:underline">Grow Remote</a>, Ireland's non-profit solving the problems of remote work.
           </p>
-          <div className="grid grid-cols-2 gap-4 max-w-[600px] mx-auto max-md:grid-cols-1">
+          <div className="grid grid-cols-2 gap-4 max-w-[600px] mx-auto md:grid-cols-1">
             <a
               href="https://www.irishtimes.com/business/work/2025/12/10/more-than-8000-submissions-made-on-right-to-request-remote-working/"
               target="_blank"
@@ -455,13 +455,13 @@ export default function Home() {
               <span className="text-xl">📰</span>
               <span className="text-sm font-medium">Keep up to date</span>
             </a>
-          </div>
-        </div>
+                  </div>
+                </div>
       </section>
 
       {/* Footer */}
       <footer className="py-8 px-6">
-        <div className="max-w-[1100px] mx-auto flex justify-between items-center flex-wrap gap-4 max-md:flex-col max-md:text-center">
+          <div className="max-w-[1100px] mx-auto flex justify-between items-center flex-wrap gap-4 md:flex-col md:text-center">
           <Link href="/" className="flex items-center gap-2.5 font-semibold text-lg">
             <div className="w-8 h-8 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] rounded-lg"></div>
             <span>Sway</span>
@@ -470,9 +470,9 @@ export default function Home() {
             <Link href="/privacy" className="text-[13px] text-[#a1a1aa] hover:text-[#fafafa] transition-colors">Privacy</Link>
             <Link href="/terms" className="text-[13px] text-[#a1a1aa] hover:text-[#fafafa] transition-colors">Terms</Link>
             <Link href="/contact" className="text-[13px] text-[#a1a1aa] hover:text-[#fafafa] transition-colors">Contact</Link>
-          </div>
+              </div>
           <span className="text-xs text-[#a1a1aa]">© {new Date().getFullYear()} Sway</span>
-        </div>
+                  </div>
       </footer>
 
       {/* Success Modal */}
@@ -487,7 +487,7 @@ export default function Home() {
           >
             <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] rounded-full flex items-center justify-center text-[28px] text-white">
               ✓
-            </div>
+                </div>
             <h3 className="text-xl font-semibold mb-2">You're in!</h3>
             <p className="text-sm text-[#a1a1aa] mb-5">
               Thanks for joining the campaign. You're helping bring remote jobs to every corner of Ireland.

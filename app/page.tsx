@@ -226,7 +226,7 @@ export default function Home() {
             Data for change.<br />Jobs for you.
           </h1>
           <p className="text-lg text-[#a1a1aa] max-w-[560px] mx-auto mb-10">
-            Register as remote-ready. Get discovered by employers. Help Ireland win a share of 100,000+ remote jobs available across Europe.
+            Sign up to the campaign for Ireland to set a national target for remote jobs, and get discovered by employers.
           </p>
 
           <form onSubmit={handleSubmit} className="max-w-[500px] mx-auto mb-4">
@@ -322,27 +322,53 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats */}
+      {/* Stats Calculator */}
       <section className="py-20 border-b border-[#27272a]">
         <div className="max-w-[1100px] mx-auto px-6">
-            <div className="grid grid-cols-4 gap-8 text-center md:grid-cols-2">
-            <div>
-              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">100k+</div>
-              <div className="text-[13px] text-[#a1a1aa]">Remote jobs monthly in Europe</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">€108M</div>
-              <div className="text-[13px] text-[#a1a1aa]">Potential annual tax revenue</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">10%</div>
-              <div className="text-[13px] text-[#a1a1aa]">Our target for Ireland</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">32</div>
-              <div className="text-[13px] text-[#a1a1aa]">Counties to cover</div>
+          {/* Slider */}
+          <div className="max-w-[600px] mx-auto mb-12 text-center">
+            <label className="block text-[22px] font-semibold mb-6 text-[#fafafa]">
+              What if Ireland captured <span className="bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent text-[28px] font-bold" id="percentDisplay">1%</span> of remote jobs?
+            </label>
+            <input
+              type="range"
+              id="targetSlider"
+              min="1"
+              max="15"
+              defaultValue="1"
+              className="w-full h-2 rounded-md bg-[#18181b] outline-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-br [&::-webkit-slider-thumb]:from-[#7c3aed] [&::-webkit-slider-thumb]:to-[#d946ef] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_4px_12px_rgba(124,58,237,0.4)] [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110 [&::-moz-range-thumb]:w-7 [&::-moz-range-thumb]:h-7 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:bg-gradient-to-br [&::-moz-range-thumb]:from-[#7c3aed] [&::-moz-range-thumb]:to-[#d946ef] [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:shadow-[0_4px_12px_rgba(124,58,237,0.4)]"
+            />
+            <div className="flex justify-between mt-3 text-[13px] text-[#a1a1aa]">
+              <span>1%</span>
+              <span>5%</span>
+              <span>10%</span>
+              <span>15%</span>
             </div>
           </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-4 gap-8 text-center md:grid-cols-2">
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent transition-all duration-300" id="jobsValue">1k</div>
+              <div className="text-[13px] text-[#a1a1aa]">Remote jobs for Ireland</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent transition-all duration-300" id="taxValue">€10.8M</div>
+              <div className="text-[13px] text-[#a1a1aa]">Annual tax revenue</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent transition-all duration-300" id="gdpValue">€20M</div>
+              <div className="text-[13px] text-[#a1a1aa]">GDP contribution</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-br from-[#7c3aed] to-[#d946ef] bg-clip-text text-transparent">80%</div>
+              <div className="text-[13px] text-[#a1a1aa]">Gain extra time locally</div>
+            </div>
+          </div>
+
+          <p className="text-center text-xs text-[#a1a1aa] mt-8">
+            Based on 100,000+ remote jobs advertised monthly across Europe
+          </p>
         </div>
       </section>
 

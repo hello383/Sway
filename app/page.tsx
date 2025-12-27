@@ -180,7 +180,10 @@ export default function Home() {
       const response = await fetch('/api/campaign-signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          subscribeToMailer: subscribeToMailer,
+        }),
       })
 
       const data = await response.json()

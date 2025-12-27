@@ -3,12 +3,13 @@
   <rect width="120" height="120" rx="24" fill="#7c3aed"/>
   
   <!-- White lightning bolt outline - centered -->
-  <path d="M60 25 L45 60 L55 60 L50 95 L75 60 L65 60 L80 25 Z" 
-        fill="none" 
-        stroke="white" 
-        stroke-width="4"
-        stroke-linejoin="round"
-        stroke-linecap="round"
-        transform="translate(17.5, 12.5)"/>
+  <g transform="translate(60, 60)">
+    <path d="M0 -35 L-15 0 L-5 0 L-10 35 L15 0 L5 0 L20 -35 Z" 
+          fill="none" 
+          stroke="white" 
+          stroke-width="4"
+          stroke-linejoin="round"
+          stroke-linecap="round"/>
+  </g>
 </svg>
 

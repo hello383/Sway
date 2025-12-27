@@ -50,13 +50,16 @@ export default function Profile() {
   const [editForm, setEditForm] = useState<Partial<Profile>>({})
   const [shouldRedirect, setShouldRedirect] = useState(false)
 
-  // CRITICAL: Immediate synchronous redirect check - runs before ANY rendering
+  // CRITICAL: Check profile visibility BEFORE allowing any rendering
+  // This runs on mount and prevents rendering if campaign_only
   useEffect(() => {
-    const immediateRedirect = async () => {
+    let cancelled = false
+    
+    const checkAndRedirect = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession()
         if (!session?.user?.email) {
-          window.location.href = '/login'
+          if (!cancelled) window.location.replace('/login')
           return
         }
 
@@ -66,10 +69,10 @@ export default function Profile() {
           .eq('email', session.user.email.toLowerCase())
           .maybeSingle()
         
-        if (profileCheck) {
+        if (profileCheck && !cancelled) {
           const vis = profileCheck.profile_visibility?.toLowerCase()?.trim()
           if (vis === 'campaign_only' || vis === 'campaign only') {
-            // IMMEDIATE redirect - don't wait
+            // FORCE redirect - replace current history entry
             window.location.replace('/signup')
             return
           }
@@ -79,8 +82,11 @@ export default function Profile() {
       }
     }
     
-    // Run immediately, don't wait
-    immediateRedirect()
+    checkAndRedirect()
+    
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   useEffect(() => {

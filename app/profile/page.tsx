@@ -50,26 +50,37 @@ export default function Profile() {
   const [editForm, setEditForm] = useState<Partial<Profile>>({})
   const [shouldRedirect, setShouldRedirect] = useState(false)
 
-  // Immediate check on mount - before any async operations
+  // CRITICAL: Immediate synchronous redirect check - runs before ANY rendering
   useEffect(() => {
-    const quickCheck = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session?.user?.email) {
-        const { data: quickProfile } = await supabase
+    const immediateRedirect = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session?.user?.email) {
+          window.location.href = '/login'
+          return
+        }
+
+        const { data: profileCheck } = await supabase
           .from('user_profiles')
           .select('profile_visibility')
           .eq('email', session.user.email.toLowerCase())
           .maybeSingle()
         
-        if (quickProfile) {
-          const vis = quickProfile.profile_visibility?.toLowerCase()?.trim()
+        if (profileCheck) {
+          const vis = profileCheck.profile_visibility?.toLowerCase()?.trim()
           if (vis === 'campaign_only' || vis === 'campaign only') {
-            window.location.href = '/signup'
+            // IMMEDIATE redirect - don't wait
+            window.location.replace('/signup')
+            return
           }
         }
+      } catch (err) {
+        console.error('Redirect check error:', err)
       }
     }
-    quickCheck()
+    
+    // Run immediately, don't wait
+    immediateRedirect()
   }, [])
 
   useEffect(() => {

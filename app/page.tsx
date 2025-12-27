@@ -99,6 +99,7 @@ export default function Home() {
   })
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState('')
+  const [subscribeToMailer, setSubscribeToMailer] = useState(true)
 
   useEffect(() => {
     // Fetch stats
@@ -317,6 +318,15 @@ export default function Home() {
             {formError && (
               <p className="text-sm text-red-400 mb-3 text-left">{formError}</p>
             )}
+            <label className="flex items-center gap-2.5 text-[13px] text-[#a1a1aa] cursor-pointer mb-3">
+              <input
+                type="checkbox"
+                checked={subscribeToMailer}
+                onChange={(e) => setSubscribeToMailer(e.target.checked)}
+                className="w-4 h-4 accent-[#7c3aed] cursor-pointer"
+              />
+              Subscribe to campaign updates
+            </label>
             <button
               type="submit"
               disabled={submitting}

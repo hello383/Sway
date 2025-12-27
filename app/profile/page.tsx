@@ -50,6 +50,28 @@ export default function Profile() {
   const [editForm, setEditForm] = useState<Partial<Profile>>({})
   const [shouldRedirect, setShouldRedirect] = useState(false)
 
+  // Immediate check on mount - before any async operations
+  useEffect(() => {
+    const quickCheck = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user?.email) {
+        const { data: quickProfile } = await supabase
+          .from('user_profiles')
+          .select('profile_visibility')
+          .eq('email', session.user.email.toLowerCase())
+          .maybeSingle()
+        
+        if (quickProfile) {
+          const vis = quickProfile.profile_visibility?.toLowerCase()?.trim()
+          if (vis === 'campaign_only' || vis === 'campaign only') {
+            window.location.href = '/signup'
+          }
+        }
+      }
+    }
+    quickCheck()
+  }, [])
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {

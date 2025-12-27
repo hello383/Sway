@@ -83,8 +83,9 @@ export default function Profile() {
 
         // If user has campaign_only profile, redirect them to signup to complete it
         if (data.profile_visibility === 'campaign_only') {
-          router.push('/signup')
           setShouldRedirect(true)
+          setLoading(false)
+          router.push('/signup')
           return
         }
 

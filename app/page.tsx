@@ -372,7 +372,7 @@ export default function Home() {
 
       {/* Two purposes */}
       <section className="grid grid-cols-2 border-b border-[#27272a] md:grid-cols-1">
-        <div className="p-20 md:p-15 border-r border-[#27272a] md:border-r-0 md:border-b">
+        <div className="p-20 md:p-16 border-r border-[#27272a] md:border-r-0 md:border-b">
           <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For Ireland</div>
           <h3 className="text-2xl font-semibold mb-4">Build the evidence</h3>
           <p className="text-[15px] text-[#a1a1aa] leading-[1.7] mb-6">Every signup adds to the data. We're proving that demand exists—in every county—and building the case for a national remote employment target.</p>
@@ -390,8 +390,8 @@ export default function Home() {
               <span>Support the push for national investment</span>
             </li>
           </ul>
-                  </div>
-        <div className="p-20 md:p-15">
+        </div>
+        <div className="p-20 md:p-16">
           <div className="text-xs uppercase tracking-wider text-[#d946ef] mb-4">For you</div>
           <h3 className="text-2xl font-semibold mb-4">Get found by employers</h3>
           <ul className="list-none space-y-2.5">

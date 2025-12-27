@@ -163,13 +163,13 @@ export default function Profile() {
     setError('')
   }
 
-  if (loading) {
+  if (loading || shouldRedirect) {
     return (
       <main className="min-h-screen bg-gray-950 py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="glass-dark rounded-3xl p-8 md:p-12 text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent mb-4"></div>
-            <p className="text-white/70">Loading your profile...</p>
+            <p className="text-white/70">{shouldRedirect ? 'Redirecting to complete your profile...' : 'Loading your profile...'}</p>
           </div>
         </div>
       </main>

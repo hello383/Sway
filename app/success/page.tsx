@@ -45,12 +45,13 @@ function SuccessContent() {
           // User is logged in - check if they have a profile
           const { data: profile } = await supabase
             .from('user_profiles')
-            .select('id')
+            .select('id, profile_visibility')
             .eq('email', session.user.email.toLowerCase())
             .maybeSingle()
 
-          if (profile && profile.id) {
-            // User has a profile - redirect to profile page
+          // Only redirect to profile if they have a complete profile (visible or email), not campaign_only
+          if (profile && profile.id && (profile.profile_visibility === 'visible' || profile.profile_visibility === 'email')) {
+            // User has a complete profile - redirect to profile page
             router.push('/profile')
             return
           }

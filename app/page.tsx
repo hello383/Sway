@@ -126,6 +126,50 @@ export default function Home() {
     return () => subscription.unsubscribe()
   }, [])
 
+  // Stats Calculator
+  useEffect(() => {
+    const slider = document.getElementById('targetSlider') as HTMLInputElement
+    const percentDisplay = document.getElementById('percentDisplay')
+    const jobsValue = document.getElementById('jobsValue')
+    const taxValue = document.getElementById('taxValue')
+    const gdpValue = document.getElementById('gdpValue')
+
+    if (!slider || !percentDisplay || !jobsValue || !taxValue || !gdpValue) return
+
+    const formatCurrency = (num: number) => {
+      if (num >= 1000000000) return '€' + (num / 1000000000).toFixed(1) + 'B'
+      if (num >= 1000000) return '€' + Math.round(num / 1000000) + 'M'
+      return '€' + Math.round(num / 1000) + 'K'
+    }
+
+    const updateStats = () => {
+      const percent = parseInt(slider.value)
+      const jobs = Math.round((percent / 100) * 100000)
+      const tax = jobs * 10800
+      const gdp = jobs * 20000
+
+      if (percentDisplay) {
+        percentDisplay.textContent = percent + '%'
+      }
+      if (jobsValue) {
+        jobsValue.textContent = jobs >= 10000 ? Math.round(jobs / 1000) + 'k' : (jobs / 1000).toFixed(1) + 'k'
+      }
+      if (taxValue) {
+        taxValue.textContent = formatCurrency(tax)
+      }
+      if (gdpValue) {
+        gdpValue.textContent = formatCurrency(gdp)
+      }
+    }
+
+    slider.addEventListener('input', updateStats)
+    updateStats() // Initial calculation
+
+    return () => {
+      slider.removeEventListener('input', updateStats)
+    }
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setFormError('')

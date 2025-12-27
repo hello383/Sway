@@ -83,8 +83,14 @@ export default function Profile() {
 
         // If user has campaign_only profile, redirect them to signup to complete it
         // Check both exact match and lowercase to handle any case issues
-        const visibility = data.profile_visibility?.toLowerCase()
+        const visibility = data.profile_visibility?.toLowerCase()?.trim()
+        console.log('Profile visibility check:', { 
+          raw: data.profile_visibility, 
+          normalized: visibility,
+          isCampaignOnly: visibility === 'campaign_only' || visibility === 'campaign only'
+        })
         if (visibility === 'campaign_only' || visibility === 'campaign only') {
+          console.log('Redirecting campaign_only user to signup')
           setShouldRedirect(true)
           setLoading(false)
           // Use window.location for immediate redirect (router.push can be slow)

@@ -31,8 +31,8 @@ export default function Login() {
               .maybeSingle()
 
             if (profile && profile.id) {
-              // User has a profile - redirect to success page
-              router.push(`/success?visibility=${profile.profile_visibility || 'email'}&id=${profile.id}`)
+              // User has a profile - redirect to profile page
+              router.push('/profile')
             } else {
               // User is signed in but no profile - redirect to signup
               router.push('/signup?oauth=success&email=' + encodeURIComponent(userEmail))
@@ -71,8 +71,25 @@ export default function Login() {
       }
 
       if (data.user) {
-        // Redirect to profile or dashboard
-        router.push('/profile')
+        // Check if user has a profile
+        const userEmail = data.user.email
+        if (userEmail) {
+          const { data: profile } = await supabase
+            .from('user_profiles')
+            .select('id')
+            .eq('email', userEmail.toLowerCase())
+            .maybeSingle()
+
+          if (profile && profile.id) {
+            // User has a profile - redirect to profile page
+            router.push('/profile')
+          } else {
+            // User doesn't have a profile - redirect to signup
+            router.push('/signup')
+          }
+        } else {
+          router.push('/signup')
+        }
       }
     } catch (err: any) {
       setError(err.message || 'Something went wrong')

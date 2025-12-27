@@ -45,8 +45,8 @@ function AuthCallbackContent() {
 
         // Redirect based on profile status
         if (profile && profile.id) {
-          // User has a profile - redirect to success page
-          router.push(`/success?visibility=${profile.profile_visibility || 'email'}&id=${profile.id}`)
+          // User has a profile - redirect to profile page
+          router.push('/profile')
         } else {
           // User doesn't have a profile - redirect to signup to complete profile
           router.push(`/signup?oauth=success&email=${encodeURIComponent(userEmail)}`)

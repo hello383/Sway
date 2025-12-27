@@ -224,8 +224,8 @@ function SignUpContent() {
               .maybeSingle()
 
             if (profile && profile.id) {
-              // User has a profile - redirect to success page
-              router.push(`/success?visibility=${profile.profile_visibility || 'email'}&id=${profile.id}`)
+              // User has a profile - redirect to profile page
+              router.push('/profile')
               return
             } else {
               // User is signed in but no profile - show OAuth signup flow

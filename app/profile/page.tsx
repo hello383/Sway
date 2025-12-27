@@ -82,14 +82,18 @@ export default function Profile() {
         }
 
         // If user has campaign_only profile, redirect them to signup to complete it
-        if (data.profile_visibility === 'campaign_only') {
+        // Check both exact match and lowercase to handle any case issues
+        const visibility = data.profile_visibility?.toLowerCase()
+        if (visibility === 'campaign_only' || visibility === 'campaign only') {
           setShouldRedirect(true)
           setLoading(false)
           // Use window.location for immediate redirect (router.push can be slow)
+          // Don't set profile state - prevent any rendering
           window.location.href = '/signup'
           return
         }
 
+        // Only set profile if it's not campaign_only
         setProfile(data)
         setEditForm(data)
         setLoading(false)
